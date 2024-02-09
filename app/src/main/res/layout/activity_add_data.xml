@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DEEAFA"
+    android:orientation="vertical"
+    tools:context=".AddDataActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_chevron_left"
+            app:tint="@color/black" />
+
+        <TextView
+            android:id="@+id/titleMonth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:text="April 2018" />
+
+        <ImageView
+            android:id="@+id/save"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/check_mark"
+            app:tint="@color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/rounded_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="How was your day ?" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/imageFrame1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imageBtn1"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/face1" />
+
+                <FrameLayout
+                    android:id="@+id/circularFrame1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circular_green_bg"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/checkMark1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/greencheck" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/imageFrame2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imageBtn2"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/face2" />
+
+                <FrameLayout
+                    android:id="@+id/circularFrame2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circular_green_bg"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/checkMark2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/greencheck" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/imageFrame3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/imageBtn3"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/face3" />
+                <FrameLayout
+                    android:id="@+id/circularFrame3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circular_green_bg"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/checkMark3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/greencheck" />
+                </FrameLayout>
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/imageFrame4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/imageBtn4"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/face4" />
+                <FrameLayout
+                    android:id="@+id/circularFrame4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circular_green_bg"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/checkMark4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/greencheck" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/imageFrame5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/imageBtn5"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/face5" />
+
+                <FrameLayout
+                    android:id="@+id/circularFrame5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circular_green_bg"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/checkMark5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/greencheck" />
+                </FrameLayout>
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/rounded_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_1sdp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="Write about today"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginVertical="@dimen/_3sdp"
+            android:layout_height="1dp"
+            android:background="@color/black" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/writeData"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_3sdp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:background="@android:color/transparent"
+            android:hint="Write something"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:minLines="5" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:background="@drawable/rounded_background"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:paddingBottom="@dimen/_6sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="Your photos" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/imageSelectionBtn"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:background="@drawable/dashed_border"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_margin="@dimen/_8sdp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/camera"
+                    android:contentDescription="Camera Icon" />
+
+            </FrameLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

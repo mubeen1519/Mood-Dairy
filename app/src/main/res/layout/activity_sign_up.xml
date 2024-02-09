@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lig_bkg"
+    tools:context=".sign_up">
+
+    <ImageView
+        android:id="@+id/reg_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/register_newimage"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/up_layout"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reg_image"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Sign Up"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18ssp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_lay_2"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/up_layout"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_user"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_52sdp"
+            android:paddingHorizontal="@dimen/_20sdp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/su_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:fontFamily="@font/monserratmedium"
+                android:hint="User Name"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_mail"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_52sdp"
+            android:paddingHorizontal="@dimen/_20sdp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/su_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:fontFamily="@font/monserratmedium"
+                android:hint="Email"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_pass"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_52sdp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/su_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/monserratmedium"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/c_pass"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_52sdp"
+            android:paddingHorizontal="@dimen/_20sdp"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/su_cpass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/monserratmedium"
+                android:hint="Confirm Password"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <soup.neumorphism.NeumorphButton
+        android:id="@+id/btn_reg"
+        style="@style/Widget.Neumorph.Button"
+        android:layout_width="@dimen/_285sdp"
+        android:visibility="invisible"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_below="@id/main_lay_2"
+        android:layout_height="wrap_content"
+        app:neumorph_backgroundColor="#EB98A0EF"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/monserratmedium"
+        android:text="Sign Up"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold" />
+
+
+
+</RelativeLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="@drawable/rounded_background"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/_10sdp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/calendarDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/_22sdp"
+            android:text="31" />
+        <TextView
+            android:id="@+id/calendarMonth"
+            android:layout_width="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/_18sdp"
+            android:text="Dec" />
+
+        <ImageView
+            android:layout_width="@dimen/_35sdp"
+            android:id="@+id/imageBtn"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:src="@drawable/face3"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_35sdp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_marginHorizontal="@dimen/_13sdp"
+        android:layout_marginVertical="@dimen/_20sdp"
+        android:layout_height="match_parent"
+        android:background="@color/grey_font" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/textualData"
+            android:layout_width="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_15sdp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="Data that was written by" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPagerImages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
