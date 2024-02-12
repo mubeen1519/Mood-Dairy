@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/board_page"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:scrollbars="vertical"
     android:background="#DEEAFA"
     tools:context=".Fragments.BoardScreen">
 
@@ -14,6 +16,7 @@
         android:gravity="center"
         android:background="#DEEAFA"
         android:orientation="horizontal"
+        android:paddingStart="@dimen/_20sdp"
         android:padding="14dp">
 
         <LinearLayout
@@ -335,15 +338,7 @@
 
        </LinearLayout>
    </LinearLayout>
-    <ProgressBar
-        android:id="@+id/rcProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:indeterminate="true"
-        android:progressTint="@color/common"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:visibility="gone" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -372,14 +367,21 @@
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/rcProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        android:progressTint="@color/common"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ListRc"
+        android:id="@+id/newList"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/_9sdp"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_50sdp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_marginBottom="@dimen/_60sdp" />
 
 
 </LinearLayout>

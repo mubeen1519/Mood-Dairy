@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MoodApp"
         tools:targetApi="31">
         <activity
+            android:name=".timeline"
+            android:exported="false" />
+        <activity
             android:name=".AddDataActivity"
             android:exported="false" />
         <activity

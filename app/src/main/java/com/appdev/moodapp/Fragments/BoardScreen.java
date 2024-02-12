@@ -1,12 +1,15 @@
 package com.appdev.moodapp.Fragments;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
@@ -55,7 +59,7 @@ import java.util.Random;
 import io.github.farshidroohi.ChartEntity;
 
 
-public class BoardScreen extends Fragment {
+public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar {
     public FragmentBoardScreenBinding binding;
     private DatabaseReference databaseReference;
     private String selectedEmoji = "Neutral";
@@ -73,6 +77,10 @@ public class BoardScreen extends Fragment {
 //}};
     private FirebaseAuth firebaseAuth;
 
+    public BoardScreen() {
+        super(R.layout.fragment_board_screen);
+    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -82,6 +90,9 @@ public class BoardScreen extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         binding.rcProgress.setVisibility(View.VISIBLE);
 
+        binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
+        binding.rcProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.common), PorterDuff.Mode.SRC_IN);
+
         LocalDate currentDate = LocalDate.now();
 
         // Get the current year
@@ -89,7 +100,124 @@ public class BoardScreen extends Fragment {
 
         // Get the first three letters of the month name
         String monthName = currentDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-        binding.titleMonth.setText(monthName + "," + currentYear);
+        binding.titleMonth.setText(monthName + " , " + currentYear);
+
+        YearMonth currentMonth = YearMonth.now();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            dataList = new ArrayList<>();
+            String yearStr = String.valueOf(currentMonth.getYear());
+            String monthStr = currentMonth.format(DateTimeFormatter.ofPattern("MM"));
+
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(currentUser.getUid()).child(yearStr).child(monthStr).child("dailyData");
+
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.exists()) {
+                       dataList.clear();
+                        int totalMoods = 0;
+                        int happyCount = 0;
+                        int smileCount = 0;
+                        int neutralCount = 0;
+                        int sadCount = 0;
+                        int cryCount = 0;
+                        int happyPercentage = 0;
+                        int smilePercentage = 0;
+                        int neutralPercentage = 0;
+                        int sadPercentage = 0;
+                        int cryPercentage = 0;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            DailyData dailyData = snapshot.getValue(DailyData.class);
+                            if (dailyData != null) {
+                                dataList.add(dailyData);
+                                totalMoods++;
+                                selectedEmoji = dailyData.getEmoji();
+                                switch (dailyData.getEmoji()) {
+                                    case "Happy":
+                                        happyCount++;
+                                        break;
+                                    case "Smile":
+                                        smileCount++;
+                                        break;
+                                    case "Neutral":
+                                        neutralCount++;
+                                        break;
+                                    case "Sad":
+                                        sadCount++;
+                                        break;
+                                    case "Cry":
+                                        cryCount++;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                // Calculate percentages
+                                int totalPercentage = 100;
+                                happyPercentage = (int) ((happyCount / (float) totalMoods) * totalPercentage);
+                                smilePercentage = (int) ((smileCount / (float) totalMoods) * totalPercentage);
+                                neutralPercentage = (int) ((neutralCount / (float) totalMoods) * totalPercentage);
+                                sadPercentage = (int) ((sadCount / (float) totalMoods) * totalPercentage);
+                                cryPercentage = (int) ((cryCount / (float) totalMoods) * totalPercentage);
+
+                                setProgressBarWeight(binding.Progress1, happyPercentage);
+                                setProgressBarWeight(binding.Progress2, smilePercentage);
+                                setProgressBarWeight(binding.Progress3, neutralPercentage);
+                                setProgressBarWeight(binding.Progress4, sadPercentage);
+                                setProgressBarWeight(binding.Progress5, cryPercentage);
+
+                                binding.Progress2.setProgress(smilePercentage);
+                                binding.Progress3.setProgress(neutralPercentage);
+                                binding.Progress4.setProgress(sadPercentage);
+                                binding.Progress5.setProgress(cryPercentage);
+                                binding.Progress1.setProgress(happyPercentage);
+
+                                binding.happyPercentage.setText(happyPercentage + "%");
+                                binding.smilePercentage.setText(smilePercentage + "%");
+                                binding.neutralPercentage.setText(neutralPercentage + "%");
+                                binding.sadPercentage.setText(sadPercentage + "%");
+                                binding.cryPercentage.setText(cryPercentage + "%");
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                        binding.rcProgress.setVisibility(View.GONE);
+                        binding.Progress1.setVisibility(happyPercentage > 0 ? View.VISIBLE : View.GONE);
+                        binding.Progress2.setVisibility(smilePercentage > 0 ? View.VISIBLE : View.GONE);
+                        binding.Progress3.setVisibility(neutralPercentage > 0 ? View.VISIBLE : View.GONE);
+                        binding.Progress4.setVisibility(sadPercentage > 0 ? View.VISIBLE : View.GONE);
+                        binding.Progress5.setVisibility(cryPercentage > 0 ? View.VISIBLE : View.GONE);
+
+                        binding.pg.setVisibility(View.GONE);
+                        binding.progressLayout.setVisibility(View.VISIBLE);
+                        binding.progressPercent.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.pg.setVisibility(View.GONE);
+                        binding.rcProgress.setVisibility(View.GONE);
+                        binding.Progress3.setProgress(100);
+                        binding.happyPercentage.setText(0 + "%");
+                        binding.smilePercentage.setText(0 + "%");
+                        binding.neutralPercentage.setText(0 + "%");
+                        binding.sadPercentage.setText(0 + "%");
+                        binding.cryPercentage.setText(0 + "%");
+                        binding.progressPercent.setVisibility(View.VISIBLE);
+                        binding.nodata.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle any errors
+                }
+            });
+            adapter = new DailyDataAdapter(dataList);
+            binding.newList.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+            binding.newList.setAdapter(adapter);
+        }
+
+
+
 
 //
 //        for (int day = 1; day <= 31; day++) {
@@ -227,123 +355,22 @@ public class BoardScreen extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        YearMonth currentMonth = YearMonth.now();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
 
-
-            String yearStr = String.valueOf(currentMonth.getYear());
-            String monthStr = currentMonth.format(DateTimeFormatter.ofPattern("MM"));
-
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
-                    .child(currentUser.getUid()).child(yearStr).child(monthStr).child("dailyData");
-
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        int totalMoods = 0;
-                        int happyCount = 0;
-                        int smileCount = 0;
-                        int neutralCount = 0;
-                        int sadCount = 0;
-                        int cryCount = 0;
-                        int happyPercentage = 0;
-                        int smilePercentage = 0;
-                        int neutralPercentage = 0;
-                        int sadPercentage = 0;
-                        int cryPercentage = 0;
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            DailyData dailyData = snapshot.getValue(DailyData.class);
-                            if (dailyData != null) {
-                                dataList.add(dailyData);
-                                totalMoods++;
-                                selectedEmoji = dailyData.getEmoji();
-                                switch (dailyData.getEmoji()) {
-                                    case "Happy":
-                                        happyCount++;
-                                        break;
-                                    case "Smile":
-                                        smileCount++;
-                                        break;
-                                    case "Neutral":
-                                        neutralCount++;
-                                        break;
-                                    case "Sad":
-                                        sadCount++;
-                                        break;
-                                    case "Cry":
-                                        cryCount++;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                // Calculate percentages
-                                int totalPercentage = 100;
-                                happyPercentage = (int) ((happyCount / (float) totalMoods) * totalPercentage);
-                                smilePercentage = (int) ((smileCount / (float) totalMoods) * totalPercentage);
-                                neutralPercentage = (int) ((neutralCount / (float) totalMoods) * totalPercentage);
-                                sadPercentage = (int) ((sadCount / (float) totalMoods) * totalPercentage);
-                                cryPercentage = (int) ((cryCount / (float) totalMoods) * totalPercentage);
-
-                                setProgressBarWeight(binding.Progress1, happyPercentage);
-                                setProgressBarWeight(binding.Progress2, smilePercentage);
-                                setProgressBarWeight(binding.Progress3, neutralPercentage);
-                                setProgressBarWeight(binding.Progress4, sadPercentage);
-                                setProgressBarWeight(binding.Progress5, cryPercentage);
-
-                                binding.Progress2.setProgress(smilePercentage);
-                                binding.Progress3.setProgress(neutralPercentage);
-                                binding.Progress4.setProgress(sadPercentage);
-                                binding.Progress5.setProgress(cryPercentage);
-                                binding.Progress1.setProgress(happyPercentage);
-
-                                binding.happyPercentage.setText(happyPercentage + "%");
-                                binding.smilePercentage.setText(smilePercentage + "%");
-                                binding.neutralPercentage.setText(neutralPercentage + "%");
-                                binding.sadPercentage.setText(sadPercentage + "%");
-                                binding.cryPercentage.setText(cryPercentage + "%");
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                        binding.rcProgress.setVisibility(View.GONE);
-                        binding.Progress1.setVisibility(happyPercentage > 0 ? View.VISIBLE : View.GONE);
-                        binding.Progress2.setVisibility(smilePercentage > 0 ? View.VISIBLE : View.GONE);
-                        binding.Progress3.setVisibility(neutralPercentage > 0 ? View.VISIBLE : View.GONE);
-                        binding.Progress4.setVisibility(sadPercentage > 0 ? View.VISIBLE : View.GONE);
-                        binding.Progress5.setVisibility(cryPercentage > 0 ? View.VISIBLE : View.GONE);
-
-                        binding.pg.setVisibility(View.GONE);
-                        binding.progressLayout.setVisibility(View.VISIBLE);
-                        binding.progressPercent.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.pg.setVisibility(View.GONE);
-                        binding.rcProgress.setVisibility(View.GONE);
-                        binding.Progress3.setProgress(100);
-                        binding.happyPercentage.setText(0 + "%");
-                        binding.smilePercentage.setText(0 + "%");
-                        binding.neutralPercentage.setText(0 + "%");
-                        binding.sadPercentage.setText(0 + "%");
-                        binding.cryPercentage.setText(0 + "%");
-                        binding.progressPercent.setVisibility(View.VISIBLE);
-                        binding.nodata.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle any errors
-                }
-            });
-            adapter = new DailyDataAdapter(dataList);
-            binding.ListRc.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.ListRc.setAdapter(adapter);
-        }
     }
 
     private void setProgressBarWeight(ProgressBar progressBar, int weight) {
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) progressBar.getLayoutParams();
         layoutParams.weight = weight;
         progressBar.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return null;
+    }
+
+    @Override
+    protected Integer getTitleRes() {
+        return null;
     }
 }

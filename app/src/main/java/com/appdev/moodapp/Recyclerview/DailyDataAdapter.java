@@ -46,7 +46,7 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataList != null ? dataList.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
