@@ -1,8 +1,10 @@
 package com.appdev.moodapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -31,7 +33,7 @@ public class sign_up extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Utils.status_bar(this, R.color.lig_bkg);
+        Utils.status_bar(this, R.color.second_bkg);
 
         Animation my_anim = AnimationUtils.loadAnimation(this, R.anim.fadein);
 
@@ -48,6 +50,7 @@ public class sign_up extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         binding.btnReg.setOnClickListener(v -> {
 
+
             String email = binding.suMail.getText().toString();
             String userName = binding.suUser.getText().toString();
             String password = binding.suPass.getText().toString();
@@ -57,6 +60,8 @@ public class sign_up extends AppCompatActivity {
             boolean userValidationReceived = new UserValidation().newUserConfirmValidationCheck(email, password, confirmPassword);
 
             if (userValidationReceived) {
+                binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);
+                binding.pg.setVisibility(View.VISIBLE);
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         UserProfile userProfile = new UserProfile(String.valueOf(R.drawable.profileimageph), userName);
@@ -69,10 +74,12 @@ public class sign_up extends AppCompatActivity {
                                     finish();
                                 });
                     } else {
+                        binding.pg.setVisibility(View.GONE);
                         Toast.makeText(this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
+                binding.pg.setVisibility(View.GONE);
                 Toast.makeText(this, checkMessage, Toast.LENGTH_SHORT).show();
             }
 

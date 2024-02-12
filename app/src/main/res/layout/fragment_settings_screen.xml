@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/lig_bkg"
+    android:layout_height="match_parent"
+    android:paddingVertical="@dimen/_40sdp"
+    tools:context=".Fragments.settingsScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/fingerPrint"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            android:src="@drawable/dayprint"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:text="Fingerprint Recognition" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/fingerprintSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:trackTint="@drawable/track_selector"
+            app:thumbTint="@drawable/thumb_selector"
+            android:layout_gravity="end"
+            android:paddingStart="@dimen/_8sdp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+         android:foreground="@drawable/ripple_effect_settings"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/reminder"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            android:src="@drawable/reminderday"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:text="Reminder" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/themeChange"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            android:src="@drawable/daymode"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:text="Dark Mode" />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitch"
+            android:layout_width="match_parent"
+            app:trackTint="@drawable/track_selector"
+            app:thumbTint="@drawable/thumb_selector"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingStart="@dimen/_8sdp" />
+
+    </LinearLayout>
+    <LinearLayout
+         android:foreground="@drawable/ripple_effect_settings"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:id="@+id/privacy"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            android:src="@drawable/ppday"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:text="Privacy Policy" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+         android:foreground="@drawable/ripple_effect_settings"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/profile"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            android:src="@drawable/profileday"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:text="Profile Settings" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+         android:foreground="@drawable/ripple_effect_settings"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/Adjust_text"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            android:src="@drawable/sizeday"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_14ssp"
+            android:text="Adjust text size" />
+
+    </LinearLayout>
+
+</LinearLayout>

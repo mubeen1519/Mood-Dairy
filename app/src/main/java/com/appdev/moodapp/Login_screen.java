@@ -1,8 +1,10 @@
 package com.appdev.moodapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -32,7 +34,7 @@ public class Login_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Utils.status_bar(this, R.color.lig_bkg);
+        Utils.status_bar(this, R.color.second_bkg);
 
         handler = new Handler();
         new_anim = AnimationUtils.loadAnimation(this, R.anim.fadein);
@@ -68,16 +70,20 @@ public class Login_screen extends AppCompatActivity {
             boolean userValidationReceived = new UserValidation().userValidationCheckReturn(email, password);
 
             if (userValidationReceived) {
+                binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);
+                binding.pg.setVisibility(View.VISIBLE);
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Intent intent = new Intent(this, CalenderViewActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
+                        binding.pg.setVisibility(View.GONE);
                         Toast.makeText(this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
+                binding.pg.setVisibility(View.GONE);
                 Toast.makeText(this, checkMessage, Toast.LENGTH_SHORT).show();
             }
         });

@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lig_bkg"
+    android:background="@color/second_bkg"
     tools:context=".sign_up">
+
+
 
     <ImageView
         android:id="@+id/reg_image"
@@ -120,18 +122,28 @@
         android:id="@+id/btn_reg"
         style="@style/Widget.Neumorph.Button"
         android:layout_width="@dimen/_285sdp"
-        android:visibility="invisible"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_below="@id/main_lay_2"
         android:layout_height="wrap_content"
-        app:neumorph_backgroundColor="#EB98A0EF"
+        android:layout_below="@id/main_lay_2"
         android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="@font/monserratmedium"
         android:text="Sign Up"
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:neumorph_backgroundColor="#EB98A0EF" />
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:id="@+id/pg"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_below="@id/btn_reg"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:progressTint="@color/common" />
 
 
 </RelativeLayout>

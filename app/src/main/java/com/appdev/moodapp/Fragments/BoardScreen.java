@@ -1,5 +1,6 @@
 package com.appdev.moodapp.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ClipDrawable;
@@ -20,12 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.appdev.moodapp.CalenderViewActivity;
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
 import com.appdev.moodapp.Utils.DailyData;
 import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.FragmentBoardScreenBinding;
 import com.appdev.moodapp.databinding.FragmentHomePageBinding;
+import com.appdev.moodapp.timeline;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -215,6 +218,13 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
             binding.newList.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
             binding.newList.setAdapter(adapter);
         }
+
+        binding.timelinebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(requireActivity(),timeline.class));
+            }
+        });
 
 
 

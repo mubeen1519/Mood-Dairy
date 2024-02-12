@@ -39,6 +39,7 @@ android {
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.biometric:biometric:1.1.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("io.github.farshidroohi:lineGraph:1.0.2")
     implementation("com.google.android.material:material:1.6.1")

@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="lig_bkg">#DEEAFA</color>
+    <color name="second_bkg">#ecf0f3</color>
     <color name="text_topic">#EB473838</color>
     <color name="get_started_Color">#EB98A0EF</color>
     <color name="text_logoname">#EB1E1C1C</color>

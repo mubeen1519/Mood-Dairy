@@ -5,8 +5,9 @@
     android:id="@+id/Login_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lig_bkg"
+    android:background="@color/second_bkg"
     tools:context=".Login_screen">
+
 
     <ImageView
         android:id="@+id/login_image"
@@ -131,8 +132,18 @@
             android:textStyle="bold"
             app:neumorph_backgroundColor="#EB98A0EF" />
 
-    </LinearLayout>
 
+    </LinearLayout>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:id="@+id/pg"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btn_lay"
+        android:visibility="gone"
+        android:progressTint="@color/common" />
 
 
 </RelativeLayout>
