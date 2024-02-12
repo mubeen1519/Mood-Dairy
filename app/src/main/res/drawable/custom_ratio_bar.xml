@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- rounded_progress_bar.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color -->
+    <item android:id="@+id/background">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" /> <!-- Default background color -->
+            <corners android:radius="16dp" /> <!-- Rounded corners -->
+        </shape>
+    </item>
+    <!-- First color -->
+    <item android:id="@+id/progress1">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#FF0000" /><!-- First color -->
+                <corners android:radius="16dp" /> <!-- Rounded corners -->
+            </shape>
+        </clip>
+    </item>
+    <!-- Second color -->
+    <item android:id="@+id/progress2">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#ABB8AF" /><!-- Second color -->
+                <corners android:radius="16dp" /> <!-- Rounded corners -->
+            </shape>
+        </clip>
+    </item>
+    <!-- Third color -->
+    <item android:id="@+id/progress3">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#B0CCD9" /><!-- Third color -->
+                <corners android:radius="16dp" /> <!-- Rounded corners -->
+            </shape>
+        </clip>
+    </item>
+    <!-- Fourth color -->
+    <item android:id="@+id/progress4">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#E4E6D0" /><!-- Fourth color -->
+                <corners android:radius="16dp" /> <!-- Rounded corners -->
+            </shape>
+        </clip>
+    </item>
+    <!-- Fifth color -->
+    <item android:id="@+id/progress5">
+        <clip>
+            <shape android:shape="rectangle">
+                <solid android:color="#FFDD67" /> <!-- Fifth color -->
+                <corners android:radius="16dp" /> <!-- Rounded corners -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

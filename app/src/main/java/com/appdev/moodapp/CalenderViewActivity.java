@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.appdev.moodapp.Fragments.BoardScreen;
 import com.appdev.moodapp.Fragments.homePage;
 import com.appdev.moodapp.databinding.ActivityCalenderViewBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -67,7 +68,7 @@ public class CalenderViewActivity extends AppCompatActivity {
 //                    loadFragment(new HomeFragment(getApplicationContext()),false);
             }
             else if (item.getItemId() == R.id.Board) {
-//                    loadFragment(new SettingsFragment(),false);
+                    loadFragment(new BoardScreen(),false);
             }
             else if(item.getItemId() == R.id.Settings) {
 //                    loadFragment(new HomeFragment(getApplicationContext()),false);

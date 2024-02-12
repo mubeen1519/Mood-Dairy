@@ -5,5 +5,7 @@
     <string name="activity_title_view">Mood Diary App</string>
     <string name="example_5_title">Calender Page</string>
     <string name="bar">Bar</string>
+    <string name="loader">"Loading initial data....."</string>
     <string name="selected_image">Selected Image</string>
+    <string name="saving">Saving data! Wait for a while......</string>
 </resources>

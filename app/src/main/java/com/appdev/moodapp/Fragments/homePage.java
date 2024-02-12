@@ -3,6 +3,8 @@ package com.appdev.moodapp.Fragments;
 import static com.kizitonwose.calendar.core.ExtensionsKt.daysOfWeek;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -13,11 +15,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.DayOfWeek;
 
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,6 +29,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appdev.moodapp.AddDataActivity;
+import com.appdev.moodapp.CalenderViewActivity;
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
 import com.appdev.moodapp.Utils.DailyData;
@@ -55,6 +61,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -77,14 +84,24 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomePageBinding.inflate(inflater, container, false);
-        Utils.status_bar(requireActivity(), R.color.example_5_dummy);
+        Utils.status_bar(requireActivity(), R.color.lig_bkg);
         firebaseAuth = FirebaseAuth.getInstance();
+        binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
+        binding.pg.setVisibility(View.VISIBLE);
+        binding.exFiveCalendar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return event.getAction() == MotionEvent.ACTION_MOVE;
+            }
+        });
+
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         List<DayOfWeek> daysOfWeek = daysOfWeek();
         YearMonth currentMonth = YearMonth.now();
         YearMonth startMonth = currentMonth.minusMonths(200);
@@ -115,8 +132,10 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                             }
                         }
                         adapter.notifyDataSetChanged();
-                    } else{
-
+                        binding.pg.setVisibility(View.GONE);
+                    } else {
+                        // Hide the loadingLayout if there's no data
+                        binding.pg.setVisibility(View.GONE);
                     }
                 }
 
@@ -144,6 +163,45 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         binding.exFiveNextMonthImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YearMonth newCurrentMonth;
+                dataList.clear();
+                CalendarMonth VisibleMonth = binding.exFiveCalendar.findFirstVisibleMonth();
+                if (VisibleMonth != null) {
+                    newCurrentMonth = VisibleMonth.getYearMonth().plusMonths(1);
+
+                    String newYearStr = String.valueOf(newCurrentMonth.getYear());
+                    String newMonthStr = newCurrentMonth.format(DateTimeFormatter.ofPattern("MM"));
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(currentUser.getUid()).child(newYearStr).child(newMonthStr).child("dailyData");
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                dataList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    DailyData dailyData = snapshot.getValue(DailyData.class);
+                                    if (dailyData != null) {
+                                        dataList.add(dailyData);
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                                binding.pg.setVisibility(View.GONE);
+                            } else {
+                                // Hide the loadingLayout if there's no data
+                                binding.pg.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle any errors
+                        }
+                    });
+                }
+
+                adapter = new DailyDataAdapter(dataList);
+                binding.ListRc.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+                binding.ListRc.setAdapter(adapter);
                 CalendarMonth firstVisibleMonth = binding.exFiveCalendar.findFirstVisibleMonth();
                 if (firstVisibleMonth != null) {
                     binding.exFiveCalendar.smoothScrollToMonth(firstVisibleMonth.getYearMonth().plusMonths(1));
@@ -154,6 +212,45 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         binding.exFivePreviousMonthImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                YearMonth newCurrentMonth;
+                dataList.clear();
+                CalendarMonth VisibleMonth = binding.exFiveCalendar.findFirstVisibleMonth();
+                if (VisibleMonth != null) {
+                    newCurrentMonth = VisibleMonth.getYearMonth().minusMonths(1);
+
+                    String newYearStr = String.valueOf(newCurrentMonth.getYear());
+                    String newMonthStr = newCurrentMonth.format(DateTimeFormatter.ofPattern("MM"));
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(currentUser.getUid()).child(newYearStr).child(newMonthStr).child("dailyData");
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                dataList.clear();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    DailyData dailyData = snapshot.getValue(DailyData.class);
+                                    if (dailyData != null) {
+                                        dataList.add(dailyData);
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                                binding.pg.setVisibility(View.GONE);
+                            } else {
+                                // Hide the loadingLayout if there's no data
+                                binding.pg.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle any errors
+                        }
+                    });
+                }
+
+                adapter = new DailyDataAdapter(dataList);
+                binding.ListRc.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+                binding.ListRc.setAdapter(adapter);
                 CalendarMonth firstVisibleMonth = binding.exFiveCalendar.findFirstVisibleMonth();
                 if (firstVisibleMonth != null) {
                     binding.exFiveCalendar.smoothScrollToMonth(firstVisibleMonth.getYearMonth().minusMonths(1));
@@ -280,10 +377,21 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
             calendarDayLayoutBinding = CalendarDayLayoutBinding.bind(view);
             view.setOnClickListener(v -> {
                 if (day.getPosition() == DayPosition.MonthDate) {
-                    String date = day.getDate().toString(); // Get the date
-                    String dayOfWeek = day.getDate().getDayOfWeek().toString(); // Get the day of the week
-                    String msg = "Date: " + date + "\nDay: " + dayOfWeek;
-                    Toast.makeText(calendarDayLayoutBinding.getRoot().getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                    String dateString = day.getDate().toString();
+                    String[] dateParts = dateString.split("-");
+                    int year = Integer.parseInt(dateParts[0]);
+                    int month = Integer.parseInt(dateParts[1]);
+                    int dayOfMonth = Integer.parseInt(dateParts[2]);
+
+                    Intent intent = new Intent(calendarDayLayoutBinding.getRoot().getContext(), AddDataActivity.class);
+
+                    intent.putExtra("day", dayOfMonth);
+                    intent.putExtra("month", month);
+                    intent.putExtra("year", year);
+
+                    calendarDayLayoutBinding.getRoot().getContext().startActivity(intent);
+
                 }
             });
         }

@@ -6,11 +6,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Utils.DailyData;
-import com.appdev.moodapp.Utils.MainPagerAdapter;
+import com.appdev.moodapp.Utils.ImageAdapter;
 import com.appdev.moodapp.databinding.SecondSampleBinding;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -58,7 +59,6 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
         }
 
         public void bind(DailyData data) {
-            List<Uri> imageUriList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date;
             try {
@@ -108,8 +108,9 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
 
             if (data.getImageUris() != null) {
                 List<String> imageUrls = data.getImageUris(); // Assuming getImageUris() returns a List<String>
-                MainPagerAdapter adapter = new MainPagerAdapter(imageUrls, binding.getRoot().getContext());
-                binding.viewPagerImages.setAdapter(adapter);
+                ImageAdapter adapter = new ImageAdapter(imageUrls, binding.getRoot().getContext());
+                binding.RcImages.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.HORIZONTAL, false));
+                binding.RcImages.setAdapter(adapter);
             }
         }
     }

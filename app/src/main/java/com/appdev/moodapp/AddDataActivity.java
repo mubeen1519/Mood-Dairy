@@ -2,30 +2,33 @@ package com.appdev.moodapp;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.appdev.moodapp.Utils.AddImageAdapter;
 import com.appdev.moodapp.Utils.DailyData;
-import com.appdev.moodapp.Utils.ImagePagerAdapter;
+import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.ActivityAddDataBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +39,16 @@ public class AddDataActivity extends AppCompatActivity {
     private ActivityAddDataBinding binding;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private String selectedEmoji = "Neutral";
+    int count = 0;
+    Boolean isOld = false;
+    AddImageAdapter adapter;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+    StorageReference storageReference = firebaseStorage.getReference();
 
 
     @Override
@@ -43,24 +56,19 @@ public class AddDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddDataBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Utils.status_bar(AddDataActivity.this, R.color.lig_bkg);
 
         int day = getIntent().getIntExtra("day", -1);
         int month = getIntent().getIntExtra("month", -1);
         int year = getIntent().getIntExtra("year", -1);
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        String monthName = months[month - 1];
+        String title = String.format(Locale.getDefault(), "%s %d", monthName, year);
+        binding.titleMonth.setText(title);
+        binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);
 
-
-        List<Uri> selectedImageUris = new ArrayList<>();
-        ImagePagerAdapter adapter = new ImagePagerAdapter(selectedImageUris, this);
-        binding.viewPager.setAdapter(adapter);
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        StorageReference storageReference;
-
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
+        List<String> selectedImageString = new ArrayList<>();
 
 
         String dayStr = String.format(Locale.getDefault(), "%02d", day);
@@ -68,6 +76,7 @@ public class AddDataActivity extends AppCompatActivity {
         String yearStr = String.valueOf(year);
 
         String currentDate = yearStr + "-" + monthStr + "-" + dayStr;
+
 
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -80,17 +89,73 @@ public class AddDataActivity extends AppCompatActivity {
                                 int count = data.getClipData().getItemCount();
                                 for (int i = 0; i < count; i++) {
                                     Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                                    selectedImageUris.add(imageUri);
+                                    selectedImageString.add(imageUri.toString());
+                                    isOld = true;
                                 }
                             } else if (data.getData() != null) {
                                 // Single image is selected
                                 Uri imageUri = data.getData();
-                                selectedImageUris.add(imageUri);
+                                selectedImageString.add(imageUri.toString());
+                                isOld = true;
                             }
                             adapter.notifyDataSetChanged(); // Notify adapter about data changes
                         }
                     }
                 });
+
+
+        adapter = new AddImageAdapter(selectedImageString, this);
+        binding.RcImages.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.RcImages.setAdapter(adapter);
+        binding.loadingLayout.setVisibility(View.VISIBLE);
+        binding.myView.setText(R.string.loader);
+
+        database.getReference().child("users")
+                .child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())
+                .child(yearStr).child(monthStr).child("dailyData").child(dayStr)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            // Data exists, populate activity components with existing data
+                            DailyData dailyData = dataSnapshot.getValue(DailyData.class);
+                            if (dailyData != null) {
+                                binding.writeData.setText(dailyData.getTextualData());
+                                selectedEmoji = dailyData.getEmoji();
+                                switch (dailyData.getEmoji()) {
+                                    case "Happy":
+                                        toggleCircularFrame(binding.circularFrame1);
+                                        break;
+                                    case "Smile":
+                                        toggleCircularFrame(binding.circularFrame2);
+                                        break;
+                                    case "Sad":
+                                        toggleCircularFrame(binding.circularFrame4);
+                                        break;
+                                    case "Cry":
+                                        toggleCircularFrame(binding.circularFrame5);
+                                        break;
+                                    default:
+                                        toggleCircularFrame(binding.circularFrame3);
+                                        break;
+                                }
+                                if (dailyData.getImageUris() != null && !dailyData.getImageUris().isEmpty()) {
+                                    selectedImageString.addAll(dailyData.getImageUris());
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                        binding.loadingLayout.setVisibility(View.GONE);
+                        binding.myView.setText(R.string.saving);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        binding.loadingLayout.setVisibility(View.GONE);
+                        binding.myView.setText(R.string.saving);
+                    }
+                });
+
 
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,53 +168,50 @@ public class AddDataActivity extends AppCompatActivity {
         binding.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                binding.loadingLayout.setVisibility(View.VISIBLE);
                 String textualData = binding.writeData.getText().toString().trim();
                 if (textualData.isEmpty()) {
                     Toast.makeText(AddDataActivity.this, "Write something about your day !", Toast.LENGTH_SHORT).show();
                 } else {
-                    DailyData dailyData;
                     List<String> imageUriStrings = new ArrayList<>();
-                    for (Uri imageUri : selectedImageUris) {
-                        String imageName = "image_" + System.currentTimeMillis(); // Generate unique image name
-                        StorageReference imageRef = storageReference.child(imageName);
+                    if (isOld) {
+                        for (String imageUri : selectedImageString) {
+                            String imageName = "image_" + System.currentTimeMillis(); // Generate unique image name
+                            StorageReference imageRef = storageReference.child(imageName);
 
-                        // Upload image to Firebase Storage
-                        imageRef.putFile(imageUri)
-                                .addOnSuccessListener(taskSnapshot -> {
-                                    // Get the uploaded image URL
-                                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                        String imageUrl = uri.toString();
-                                        imageUriStrings.add(imageUrl);
+                            // Upload image to Firebase Storage
+                            imageRef.putFile(Uri.parse(imageUri))
+                                    .addOnSuccessListener(taskSnapshot -> {
+                                        // Get the uploaded image URL
+                                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                            String imageUrl = uri.toString();
+                                            imageUriStrings.add(imageUrl);
+                                            count++;
+                                            if (count == selectedImageString.size()) {
+                                                saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, imageUriStrings, yearStr, monthStr, dayStr);
+                                            }
+                                        });
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle any errors during image upload
+                                        Toast.makeText(AddDataActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AddDataActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                                     });
-                                })
-                                .addOnFailureListener(e -> {
-                                    // Handle any errors during image upload
-                                    Toast.makeText(AddDataActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-                                });
+                        }
                     }
-                    if (selectedImageUris.isEmpty()) {
-                        dailyData = new DailyData(currentDate, selectedEmoji, textualData);
-                    } else {
-                        dailyData = new DailyData(currentDate, selectedEmoji, textualData, imageUriStrings);
+                    else if (count == 0 && selectedImageString.isEmpty()) {
+                        saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, imageUriStrings, yearStr, monthStr, dayStr);
+                    } else if (count == 0 && selectedImageString.size() > 0) {
+                        saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, selectedImageString, yearStr, monthStr, dayStr);
                     }
-
-                    database.getReference().child("users").
-                            child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).
-                            child(yearStr).child(monthStr).child("dailyData").child(dayStr).
-                            setValue(dailyData).addOnSuccessListener(unused -> {
-                                Toast.makeText(AddDataActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(AddDataActivity.this, CalenderViewActivity.class));
-                                finish();
-                            }).addOnFailureListener(e -> {
-                                Toast.makeText(AddDataActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-                            });
                 }
             }
         });
         binding.imageSelectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                selectedImageString.clear();
                 openGallery();
             }
         });
@@ -195,6 +257,28 @@ public class AddDataActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void saveDailyDataToDatabase(String currentDate, String selectedEmoji, String textualData, List<String> imageUriStrings, String yearStr, String monthStr, String dayStr) {
+        DailyData dailyData;
+        if (imageUriStrings.isEmpty()) {
+            dailyData = new DailyData(currentDate, selectedEmoji, textualData);
+        } else {
+            dailyData = new DailyData(currentDate, selectedEmoji, textualData, imageUriStrings);
+        }
+
+        database.getReference().child("users")
+                .child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())
+                .child(yearStr).child(monthStr).child("dailyData").child(dayStr)
+                .setValue(dailyData)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(AddDataActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AddDataActivity.this, CalenderViewActivity.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(AddDataActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void openGallery() {

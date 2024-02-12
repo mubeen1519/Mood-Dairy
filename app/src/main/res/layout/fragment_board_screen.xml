@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#DEEAFA"
+    tools:context=".Fragments.BoardScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="#DEEAFA"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/titleMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="April 2018"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:rotation="268"
+                app:srcCompat="@drawable/ic_chevron_left"
+                app:tint="@color/black" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/rounded_background"
+        android:paddingHorizontal="@dimen/_11sdp"
+        android:paddingVertical="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_9sdp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Mood Flow"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:paddingVertical="@dimen/_20sdp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/happy_face" />
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/smile_face" />
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/neutral_face" />
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sad_ratio" />
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/cry_ratio" />
+            </LinearLayout>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/getTheGraph"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_marginHorizontal="@dimen/_9sdp"
+       android:paddingHorizontal="@dimen/_15sdp"
+       android:background="@drawable/rounded_background"
+       android:layout_marginTop="@dimen/_10sdp"
+       android:orientation="vertical"
+       android:paddingVertical="@dimen/_11sdp"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:fontFamily="@font/poppins_medium"
+           android:text="Mood Bar"
+           android:textAlignment="center"
+           android:textColor="@color/black"
+           android:textSize="@dimen/_14ssp" />
+
+       <ProgressBar
+           android:id="@+id/pg"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_gravity="center"
+           android:indeterminate="true"
+           android:progressTint="@color/common"
+           android:layout_marginTop="@dimen/_20sdp"
+           android:visibility="visible" />
+
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/nodata"
+           android:fontFamily="@font/poppins_medium"
+           android:text="No data is stored yet !"
+           android:layout_marginTop="@dimen/_20sdp"
+           android:textAlignment="center"
+           android:visibility="gone"
+           android:textColor="@color/example_5_text_grey_light"
+           android:textSize="@dimen/_14ssp" />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:orientation="horizontal"
+           android:visibility="gone"
+           android:id="@+id/progressLayout"
+           android:layout_marginVertical="@dimen/_15sdp"
+           android:layout_marginHorizontal="@dimen/_11sdp"
+           android:background="@drawable/rounded_background"
+           android:layout_height="wrap_content">
+
+           <ProgressBar
+               android:id="@+id/Progress1"
+               style="?android:attr/progressBarStyleHorizontal"
+               android:layout_width="0dp"
+               android:layout_height="@dimen/_16sdp"
+               android:layout_weight="1"
+               android:progress="66"
+               android:progressDrawable="@drawable/progress_bar_green" />
+
+           <ProgressBar
+               android:id="@+id/Progress2"
+               style="?android:attr/progressBarStyleHorizontal"
+               android:layout_width="0dp"
+               android:layout_height="@dimen/_16sdp"
+               android:layout_weight="1"
+               android:progress="33"
+               android:progressDrawable="@drawable/progress_bar_yellow" />
+
+           <ProgressBar
+               android:id="@+id/Progress3"
+               style="?android:attr/progressBarStyleHorizontal"
+               android:layout_width="0dp"
+               android:layout_height="@dimen/_16sdp"
+               android:layout_weight="1"
+               android:progress="0"
+               android:progressDrawable="@drawable/progress_bar_red" />
+
+           <ProgressBar
+               android:id="@+id/Progress4"
+               style="?android:attr/progressBarStyleHorizontal"
+               android:layout_width="0dp"
+               android:layout_height="@dimen/_16sdp"
+               android:layout_weight="1"
+               android:progress="0"
+               android:progressDrawable="@drawable/progress_bar_grey" />
+
+           <ProgressBar
+               android:id="@+id/Progress5"
+               style="?android:attr/progressBarStyleHorizontal"
+               android:layout_width="0dp"
+               android:layout_height="@dimen/_16sdp"
+               android:layout_weight="1"
+               android:progress="0"
+               android:progressDrawable="@drawable/progress_bar_5" />
+
+       </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:paddingHorizontal="@dimen/_20sdp"
+           android:visibility="gone"
+           android:id="@+id/progressPercent"
+           android:orientation="horizontal">
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:layout_width="@dimen/_20sdp"
+                   android:layout_marginTop="@dimen/_4sdp"
+                   android:src="@drawable/face1"
+                   android:layout_gravity="center"
+                   android:layout_height="@dimen/_20sdp"/>
+
+               <TextView
+                   android:id="@+id/happyPercentage"
+                   android:layout_width="match_parent"
+                     android:layout_marginTop="4dp"
+                   android:layout_marginStart="@dimen/_5sdp"
+                   android:layout_height="wrap_content"
+                   android:gravity="center"
+                   android:textSize="@dimen/_11ssp"
+                   android:text="20%" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:layout_width="@dimen/_20sdp"
+                   android:layout_marginTop="@dimen/_4sdp"
+                   android:src="@drawable/face2"
+                   android:layout_gravity="center"
+                   android:layout_height="@dimen/_20sdp"/>
+
+               <TextView
+                   android:id="@+id/smilePercentage"
+                   android:layout_width="match_parent"
+                     android:layout_marginTop="4dp"
+                   android:layout_marginStart="@dimen/_5sdp"
+                   android:layout_height="wrap_content"
+                   android:gravity="center"
+                   android:textSize="@dimen/_11ssp"
+                   android:text="20%" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:layout_width="@dimen/_20sdp"
+                   android:layout_marginTop="@dimen/_4sdp"
+                   android:src="@drawable/face3"
+                   android:layout_gravity="center"
+                   android:layout_height="@dimen/_20sdp"/>
+
+               <TextView
+                   android:id="@+id/neutralPercentage"
+                   android:layout_width="match_parent"
+                     android:layout_marginTop="4dp"
+                   android:layout_marginStart="@dimen/_5sdp"
+                   android:layout_height="wrap_content"
+                   android:gravity="center"
+                   android:textSize="@dimen/_11ssp"
+                   android:text="20%" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:layout_width="@dimen/_20sdp"
+                   android:layout_marginTop="@dimen/_4sdp"
+                   android:src="@drawable/face4"
+                   android:layout_gravity="center"
+                   android:layout_height="@dimen/_20sdp"/>
+
+               <TextView
+                   android:id="@+id/sadPercentage"
+                   android:layout_width="match_parent"
+                    android:layout_marginTop="4dp"
+                   android:layout_marginStart="@dimen/_5sdp"
+                   android:layout_height="wrap_content"
+                   android:gravity="center"
+                   android:textSize="@dimen/_11ssp"
+                   android:text="20%" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:layout_width="@dimen/_20sdp"
+                   android:layout_marginTop="@dimen/_4sdp"
+                   android:src="@drawable/face5"
+                   android:layout_gravity="center"
+                   android:layout_height="@dimen/_20sdp"/>
+
+               <TextView
+                   android:id="@+id/cryPercentage"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="4dp"
+                   android:layout_marginStart="@dimen/_5sdp"
+                   android:gravity="center"
+                   android:textSize="@dimen/_11ssp"
+                   android:text="20%" />
+           </LinearLayout>
+
+       </LinearLayout>
+   </LinearLayout>
+    <ProgressBar
+        android:id="@+id/rcProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        android:progressTint="@color/common"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/_9sdp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="@dimen/_4sdp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsregular"
+            android:text="Timeline"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsregular"
+            android:text="See all"
+            android:textAlignment="textEnd"
+            android:textColor="@color/mid_blue"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ListRc"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/_9sdp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_50sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+</LinearLayout>
