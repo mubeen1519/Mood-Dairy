@@ -64,11 +64,12 @@ public class sign_up extends AppCompatActivity {
                 binding.pg.setVisibility(View.VISIBLE);
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        UserProfile userProfile = new UserProfile(String.valueOf(R.drawable.profileimageph), userName);
+                        UserProfile userProfile = new UserProfile(userName,password,email);
                         firebaseDatabase.getReference().child("userProfiles")
                                 .child(Objects.requireNonNull(firebaseAuth.getUid()))
                                 .setValue(userProfile)
                                 .addOnSuccessListener(aVoid -> {
+                                    Utils.setAppTheme(sign_up.this);
                                     Intent intent = new Intent(this, CalenderViewActivity.class);
                                     startActivity(intent);
                                     finish();

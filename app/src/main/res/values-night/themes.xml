@@ -2,6 +2,58 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MoodApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/nightWord</item>
+        <item name="colorPrimaryVariant">@color/nightWord</item>
+        <item name="bottomAppBarStyle">@style/BottomBack</item>
     </style>
+
+    <style name="BottomBack"><item name="android:background">@color/white</item></style>
+
+    <style name="BottomBackground">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="IconColor">
+        <item name="itemIconTint">@color/color_icon_tint</item>
+        <item name="android:background">@color/nightbottom</item>
+    </style>
+
+
+    <style name="Background"><item name="android:background">@color/black</item></style>
+    <style name="ViewsBackground"><item name="android:background">@color/nightViewBack</item></style>
+    <style name="WordColor"><item name="android:textColor">@color/white</item></style>
+    <style name="ComponentsColor"><item name="android:tint">@color/white</item></style>
+    <style name="DividerColor"><item name="android:background">@color/white</item></style>
+    <style name="DialogColor"><item name="android:background">@color/black</item></style>
+
+
+    <style name="WordSeeAll"><item name="android:textColor">@color/grey_font</item></style>
+    <style name="WordStatic"><item name="android:textColor">#F0000000</item></style>
+    <style name="WordStaticN"><item name="android:textColor">#FFFFFF</item></style>
+
+    <style name="fingerPrint"><item name="android:src">@drawable/nightprint</item></style>
+    <style name="reminder"><item name="android:src">@drawable/remindernight</item></style>
+    <style name="darkMode"><item name="android:src">@drawable/nightmode</item></style>
+    <style name="Policy"><item name="android:src">@drawable/ppnight</item></style>
+    <style name="Profile"><item name="android:src">@drawable/profilenight</item></style>
+    <style name="WordSize"><item name="android:src">@drawable/sizenight</item></style>
+
+    <style name="RoundedLinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">@dimen/_20sdp</item>
+        <item name="android:layout_marginTop">@dimen/_10sdp</item>
+        <item name="android:background">@drawable/rounded_background_night</item> <!-- Set the rounded background drawable -->
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="CustomFrameLayout">
+        <item name="android:layout_width">@dimen/_100sdp</item>
+        <item name="android:layout_height">@dimen/_100sdp</item>
+        <item name="android:background">@drawable/dashed_night</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_margin">@dimen/_8sdp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
 </resources>

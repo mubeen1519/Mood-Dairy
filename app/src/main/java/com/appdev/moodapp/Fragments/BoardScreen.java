@@ -89,7 +89,11 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentBoardScreenBinding.inflate(inflater, container, false);
-        Utils.status_bar(requireActivity(), R.color.lig_bkg);
+        if(Utils.isDarkModeActivated(requireActivity())){
+            Utils.status_bar_dark(requireActivity(), R.color.black);
+        } else{
+            Utils.status_bar(requireActivity(), R.color.lig_bkg);
+        }
         firebaseAuth = FirebaseAuth.getInstance();
         binding.rcProgress.setVisibility(View.VISIBLE);
 

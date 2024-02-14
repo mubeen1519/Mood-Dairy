@@ -53,7 +53,11 @@ public class timeline extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Utils.status_bar(timeline.this, R.color.lig_bkg);
+        if(Utils.isDarkModeActivated(timeline.this)){
+            Utils.status_bar_dark(timeline.this, R.color.black);
+        } else{
+            Utils.status_bar(timeline.this, R.color.lig_bkg);
+        }
         firebaseAuth = FirebaseAuth.getInstance();
 
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);

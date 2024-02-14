@@ -1,17 +1,21 @@
 package com.appdev.moodapp.Fragments;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 import static androidx.biometric.BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE;
+
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
@@ -22,11 +26,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.appdev.moodapp.R;
+import com.appdev.moodapp.ThemeChange;
 import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.FragmentSettingsScreenBinding;
+import com.appdev.moodapp.timeline;
+import com.appdev.moodapp.updateData;
 
 import java.util.concurrent.Executor;
 
@@ -35,10 +43,25 @@ public class settingsScreen extends Fragment {
 
     private FragmentSettingsScreenBinding binding; // Declare the binding object
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment using view binding
         binding = FragmentSettingsScreenBinding.inflate(inflater, container, false);
+        if(Utils.isDarkModeActivated(requireActivity())){
+            Utils.status_bar_dark(requireActivity(), R.color.black);
+        } else{
+            Utils.status_bar(requireActivity(), R.color.lig_bkg);
+        }
+
+        binding.themeChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireContext().startActivity(new Intent(requireActivity(), ThemeChange.class));
+                requireActivity().finish();
+            }
+        });
+
         binding.fingerprintSwitch.setChecked(Utils.getBoolean(requireContext()));
         binding.fingerprintSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             boolean switchState = false; // Assume switch state is false initially
@@ -66,6 +89,13 @@ public class settingsScreen extends Fragment {
 
             // Set the switch state
             binding.fingerprintSwitch.setChecked(switchState);
+        });
+
+        binding.profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireContext().startActivity(new Intent(requireActivity(), updateData.class));
+            }
         });
 
         return binding.getRoot(); // Return the root view of the binding
@@ -123,6 +153,7 @@ public class settingsScreen extends Fragment {
             }
         }
     }
+
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

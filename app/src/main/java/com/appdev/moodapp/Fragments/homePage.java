@@ -84,7 +84,11 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomePageBinding.inflate(inflater, container, false);
-        Utils.status_bar(requireActivity(), R.color.lig_bkg);
+        if(Utils.isDarkModeActivated(requireActivity())){
+            Utils.status_bar_dark(requireActivity(), R.color.black);
+        } else{
+            Utils.status_bar(requireActivity(), R.color.lig_bkg);
+        }
         firebaseAuth = FirebaseAuth.getInstance();
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
         binding.pg.setVisibility(View.VISIBLE);
@@ -282,7 +286,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
 
                 if (data.getPosition() == DayPosition.MonthDate) {
-                    textView.setTextColor(ContextCompat.getColor(context, R.color.black));
                 } else {
                     textView.setTextColor(ContextCompat.getColor(context, R.color.example_5_text_grey));
                     container.calendarDayLayoutBinding.getRoot().setBackground(null);
@@ -303,7 +306,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                     for (int i = 0; i < container.legendLayout.getChildCount(); i++) {
                         TextView tv = (TextView) container.legendLayout.getChildAt(i);
                         tv.setText(daysOfWeek.get(i).getDisplayName(TextStyle.SHORT, Locale.getDefault()).toUpperCase(Locale.getDefault()));
-                        tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
 
                         Typeface customTypeface = ResourcesCompat.getFont(container.getView().getContext(), R.font.monserratmedium);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/DialogColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/second_bkg"
     android:padding="16dp">
 
     <RadioGroup
@@ -15,102 +15,97 @@
         <!-- Radio button for "All" -->
         <RadioButton
             android:id="@+id/radioButtonAll"
+            style="@style/WordColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All"
             android:checked="true"
-            android:textColor="@android:color/black" />
+            android:text="All" />
 
         <!-- Radio button for "Custom" -->
 
         <RadioButton
             android:id="@+id/radioButtonCustom"
+            style="@style/WordColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Custom"
             android:layout_marginStart="@dimen/_20sdp"
-            android:textColor="@android:color/black" />
+            android:text="Custom" />
     </RadioGroup>
 
     <CheckBox
         android:id="@+id/checkBoxOption1"
+        style="@style/WordColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="All"
-        android:paddingStart="@dimen/_5sdp"
-        android:textColor="@android:color/black"
-        android:checked="true"
         android:layout_below="@id/radioGroup"
-        android:visibility="gone"
-        />
+        android:checked="true"
+        android:paddingStart="@dimen/_5sdp"
+        android:text="All"
+        android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/checkBoxOption2"
+        style="@style/WordColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Happy"
-        android:paddingStart="@dimen/_5sdp"
-        android:textColor="@android:color/black"
         android:layout_below="@id/checkBoxOption1"
-         android:visibility="gone"
-        />
+        android:paddingStart="@dimen/_5sdp"
+        android:text="Happy"
+        android:visibility="gone" />
+
     <CheckBox
         android:id="@+id/checkBoxOption3"
+        style="@style/WordColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Smile"
-        android:paddingStart="@dimen/_5sdp"
-        android:textColor="@android:color/black"
         android:layout_below="@id/checkBoxOption2"
-         android:visibility="gone"
-        />
+        android:paddingStart="@dimen/_5sdp"
+        android:text="Smile"
+        android:visibility="gone" />
 
     <CheckBox
         android:id="@+id/checkBoxOption4"
+        style="@style/WordColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Neutral"
-        android:paddingStart="@dimen/_5sdp"
-        android:textColor="@android:color/black"
         android:layout_below="@id/checkBoxOption3"
-         android:visibility="gone"
-        />
+        android:paddingStart="@dimen/_5sdp"
+        android:text="Neutral"
+        android:visibility="gone" />
+
     <CheckBox
         android:id="@+id/checkBoxOption5"
+        style="@style/WordColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sad"
-        android:paddingStart="@dimen/_5sdp"
-        android:textColor="@android:color/black"
         android:layout_below="@id/checkBoxOption4"
-         android:visibility="gone"/>
+        android:paddingStart="@dimen/_5sdp"
+        android:text="Sad"
+        android:visibility="gone" />
+
     <CheckBox
         android:id="@+id/checkBoxOption6"
+        style="@style/WordColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cry"
-        android:paddingStart="@dimen/_5sdp"
-        android:textColor="@android:color/black"
         android:layout_below="@id/checkBoxOption5"
-         android:visibility="gone"
-        />
+        android:paddingStart="@dimen/_5sdp"
+        android:text="Cry"
+        android:visibility="gone" />
 
-
-    <soup.neumorphism.NeumorphButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/close_btn"
-        style="@style/Widget.Neumorph.Button"
         android:layout_width="@dimen/_170sdp"
         android:layout_height="wrap_content"
         android:layout_below="@id/checkBoxOption6"
         android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
         android:layout_marginTop="20dp"
+        android:background="@drawable/backicon"
         android:fontFamily="@font/monserratmedium"
         android:text="Done"
         android:textColor="@color/white"
         android:textSize="@dimen/_12ssp"
-        android:textStyle="bold"
-        app:neumorph_backgroundColor="#EB98A0EF" />
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

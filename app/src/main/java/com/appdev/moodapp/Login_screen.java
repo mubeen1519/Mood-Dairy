@@ -74,6 +74,7 @@ public class Login_screen extends AppCompatActivity {
                 binding.pg.setVisibility(View.VISIBLE);
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Utils.setAppTheme(Login_screen.this);
                         Intent intent = new Intent(this, CalenderViewActivity.class);
                         startActivity(intent);
                         finish();

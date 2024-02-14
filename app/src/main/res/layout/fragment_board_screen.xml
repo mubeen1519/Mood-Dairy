@@ -7,14 +7,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:scrollbars="vertical"
-    android:background="#DEEAFA"
+    style="@style/Background"
     tools:context=".Fragments.BoardScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="#DEEAFA"
+        style="@style/Background"
         android:orientation="horizontal"
         android:paddingStart="@dimen/_20sdp"
         android:padding="14dp">
@@ -32,7 +32,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="April 2018"
                 android:textAlignment="center"
-                android:textColor="@color/black"
+                style="@style/WordColor"
                 android:textSize="20sp" />
 
             <ImageView
@@ -43,7 +43,7 @@
                 android:clickable="true"
                 android:rotation="268"
                 app:srcCompat="@drawable/ic_chevron_left"
-                app:tint="@color/black" />
+                style="@style/ComponentsColor" />
 
         </LinearLayout>
 
@@ -51,7 +51,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@drawable/rounded_background"
+        style="@style/RoundedLinearLayout"
         android:paddingHorizontal="@dimen/_11sdp"
         android:paddingVertical="@dimen/_15sdp"
         android:layout_marginHorizontal="@dimen/_9sdp"
@@ -63,7 +63,7 @@
             android:fontFamily="@font/poppins_medium"
             android:text="Mood Flow"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            style="@style/WordColor"
             android:textSize="@dimen/_14ssp" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,7 +115,7 @@
        android:layout_width="match_parent"
        android:layout_marginHorizontal="@dimen/_9sdp"
        android:paddingHorizontal="@dimen/_15sdp"
-       android:background="@drawable/rounded_background"
+       style="@style/RoundedLinearLayout"
        android:layout_marginTop="@dimen/_10sdp"
        android:orientation="vertical"
        android:paddingVertical="@dimen/_11sdp"
@@ -127,7 +127,7 @@
            android:fontFamily="@font/poppins_medium"
            android:text="Mood Bar"
            android:textAlignment="center"
-           android:textColor="@color/black"
+           style="@style/WordColor"
            android:textSize="@dimen/_14ssp" />
 
        <ProgressBar
@@ -353,7 +353,7 @@
             android:fontFamily="@font/poppinsregular"
             android:text="Timeline"
             android:textAlignment="textStart"
-            android:textColor="@color/black"
+            style="@style/WordColor"
             android:textStyle="bold"
             android:textSize="@dimen/_12ssp" />
 
@@ -364,7 +364,7 @@
             android:fontFamily="@font/poppinsregular"
             android:text="See all"
             android:textAlignment="textEnd"
-            android:textColor="@color/mid_blue"
+            style="@style/WordSeeAll"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 

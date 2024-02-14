@@ -56,7 +56,11 @@ public class AddDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddDataBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Utils.status_bar(AddDataActivity.this, R.color.lig_bkg);
+        if(Utils.isDarkModeActivated(AddDataActivity.this)){
+            Utils.status_bar_dark(AddDataActivity.this, R.color.black);
+        } else{
+            Utils.status_bar(AddDataActivity.this, R.color.lig_bkg);
+        }
 
         int day = getIntent().getIntExtra("day", -1);
         int month = getIntent().getIntExtra("month", -1);

@@ -44,8 +44,8 @@ public class CalenderViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCalenderViewBinding.inflate(getLayoutInflater()); // Inflate the binding object
         setContentView(binding.getRoot()); // Set the root view of the layout
-
-        if(Utils.getBoolean(getApplicationContext())){
+        Utils.applyTheme(CalenderViewActivity.this, Utils.getThemeMode(CalenderViewActivity.this));
+        if (Utils.getBoolean(getApplicationContext())) {
             if (Utils.isFingerprintSensorAvailable(getApplicationContext())) {
                 // Device has a fingerprint sensor
                 if (Utils.hasEnrolledFingerprints(getApplicationContext())) {
@@ -86,17 +86,15 @@ public class CalenderViewActivity extends AppCompatActivity {
 
                     biometricPrompt.authenticate(promptInfo);
                 } else {
-                    showToast(getApplicationContext(),"You need to enroll/add at least one Fingerprint from Settings App.");
+                    showToast(getApplicationContext(), "You need to enroll/add at least one Fingerprint from Settings App.");
                     // Set switch state to false if there are no enrolled fingerprints
                 }
             } else {
-                showToast(getApplicationContext(),"Fingerprint Sensor for Biometric authentication is not supported on this device.");
+                showToast(getApplicationContext(), "Fingerprint Sensor for Biometric authentication is not supported on this device.");
                 // Set switch state to false if the fingerprint sensor is not available
             }
 
         }
-
-
 
 
         Toolbar toolbar = binding.activityToolbar;
@@ -128,32 +126,29 @@ public class CalenderViewActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.Diary) {
-                loadFragment(new homePage(),false);
-            }
-            else if(item.getItemId() == R.id.Category) {
+                loadFragment(new homePage(), false);
+            } else if (item.getItemId() == R.id.Category) {
 //                    loadFragment(new HomeFragment(getApplicationContext()),false);
-            }
-            else if (item.getItemId() == R.id.Board) {
-                    loadFragment(new BoardScreen(),false);
-            }
-            else if(item.getItemId() == R.id.Settings) {
-                    loadFragment(new settingsScreen(),false);
+            } else if (item.getItemId() == R.id.Board) {
+                loadFragment(new BoardScreen(), false);
+            } else if (item.getItemId() == R.id.Settings) {
+                loadFragment(new settingsScreen(), false);
             }
             return true;
         });
-        loadFragment(new homePage(),true);
+        loadFragment(new homePage(), true);
 
 
     }
 
 
-    public void loadFragment(Fragment fragment, Boolean isAppInit){
+    public void loadFragment(Fragment fragment, Boolean isAppInit) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(isAppInit){
-            fragmentTransaction.add(R.id.frame_layout,fragment);
-        } else{
-            fragmentTransaction.replace(R.id.frame_layout,fragment);
+        if (isAppInit) {
+            fragmentTransaction.add(R.id.frame_layout, fragment);
+        } else {
+            fragmentTransaction.replace(R.id.frame_layout, fragment);
         }
         fragmentTransaction.commit();
 

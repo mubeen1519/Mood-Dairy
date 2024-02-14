@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC"
-        android:requiredFeature="false"/>
+    <uses-permission
+        android:name="android.permission.USE_BIOMETRIC"
+        android:requiredFeature="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +21,12 @@
         android:theme="@style/Theme.MoodApp"
         tools:targetApi="31">
         <activity
+            android:name=".ThemeChange"
+            android:exported="false" />
+        <activity
+            android:name=".updateData"
+            android:exported="false" />
+        <activity
             android:name=".timeline"
             android:exported="false" />
         <activity
@@ -29,10 +37,12 @@
             android:exported="false" />
         <activity
             android:name=".sign_up"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MoodCheckApp" />
         <activity
             android:name=".Login_screen"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.MoodCheckApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

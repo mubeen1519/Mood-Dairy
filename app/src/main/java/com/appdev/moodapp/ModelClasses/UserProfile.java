@@ -1,21 +1,16 @@
 package com.appdev.moodapp.ModelClasses;
 
 public class UserProfile {
-    String userImage, UserName;
+    String UserName, UserPassword, UserEmail;
 
-    public UserProfile() {}
+    public UserProfile() {
+    }
 
-    public UserProfile(String userImage, String userName) {
-        this.userImage = userImage;
+
+    public UserProfile(String userName, String userPassword, String userEmail) {
         UserName = userName;
-    }
-
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
+        UserPassword = userPassword;
+        UserEmail = userEmail;
     }
 
     public String getUserName() {
@@ -24,5 +19,21 @@ public class UserProfile {
 
     public void setUserName(String userName) {
         UserName = userName;
+    }
+
+    public String getUserPassword() {
+        return UserPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        UserPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return UserEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        UserEmail = userEmail;
     }
 }
