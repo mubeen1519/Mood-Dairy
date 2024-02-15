@@ -7,5 +7,5 @@
     android:gravity="center"
     android:fontFamily="@font/monserratmedium"
     style="@style/WordColor"
-    android:textSize="15sp"
+    android:textSize="@dimen/_12ssp"
     tools:text="SUN" />

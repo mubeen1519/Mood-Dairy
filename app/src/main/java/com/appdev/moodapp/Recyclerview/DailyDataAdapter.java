@@ -1,9 +1,11 @@
 package com.appdev.moodapp.Recyclerview;
 
-import android.net.Uri;
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +18,6 @@ import com.appdev.moodapp.databinding.SecondSampleBinding;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +27,10 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
 
     private List<DailyData> dataList;
 
-
     public DailyDataAdapter(List<DailyData> dataList) {
         this.dataList = dataList;
     }
+
 
     @NonNull
     @Override
@@ -59,6 +60,8 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
         }
 
         public void bind(DailyData data) {
+            SharedPreferences preferences = binding.getRoot().getContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+            String textSizeName = preferences.getString("text_size", "");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date;
             try {
@@ -86,6 +89,18 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
             binding.calendarDay.setText(String.valueOf(dayNumber));
             binding.calendarMonth.setText(firstThreeLettersOfMonth);
             binding.textualData.setText(data.getTextualData());
+
+            switch (textSizeName) {
+                case "medium":
+                    forMedium();
+                    break;
+                case "large":
+                    forLarge();
+                    break;
+                default:
+                    forDefault();
+                    break;
+            }
             int emojiResId;
             switch (data.getEmoji()) {
                 case "Happy":
@@ -113,7 +128,25 @@ public class DailyDataAdapter extends RecyclerView.Adapter<DailyDataAdapter.View
                 binding.RcImages.setAdapter(adapter);
             }
         }
+        public void forDefault() {
+            binding.calendarDay.setTextAppearance(R.style.RadioSize);
+            binding.calendarMonth.setTextAppearance(R.style.RadioSize);
+            binding.textualData.setTextAppearance(R.style.RadioSize);
+        }
+
+        public void forMedium() {
+            binding.calendarDay.setTextAppearance(R.style.RadioSizeMedium);
+            binding.calendarMonth.setTextAppearance(R.style.RadioSizeMedium);
+            binding.textualData.setTextAppearance(R.style.RadioSizeMedium);
+        }
+
+        public void forLarge() {
+            binding.calendarDay.setTextAppearance(R.style.RadioSizeLarge);
+            binding.calendarMonth.setTextAppearance(R.style.RadioSizeLarge);
+            binding.textualData.setTextAppearance(R.style.RadioSizeLarge);
+        }
     }
+
 }
 
 

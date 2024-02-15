@@ -97,11 +97,16 @@ public class updateData extends AppCompatActivity {
 
                 String checkMessage = new UserValidation().userValidationCheck(Objects.requireNonNull(binding.suMail.getText()).toString(), Objects.requireNonNull(binding.suPass.getText()).toString());
                 boolean userValidationReceived = new UserValidation().userValidationCheckReturn(Objects.requireNonNull(binding.suMail.getText()).toString(), Objects.requireNonNull(binding.suPass.getText()).toString());
-                if (!Objects.requireNonNull(binding.suUser.getText()).toString().trim().equals(userName.trim()) ||
-                        !Objects.requireNonNull(binding.suMail.getText()).toString().trim().equals(email.trim()) ||
-                        !Objects.requireNonNull(binding.suPass.getText()).toString().trim().equals(password.trim())) {
-                    if (userValidationReceived && !binding.suUser.getText().toString().trim().isEmpty()) {
+
+
+
+
+                //---------------------------
+
+                if (!Objects.requireNonNull(binding.suMail.getText()).toString().trim().equals(email.trim()) ) {
+                    if (userValidationReceived && !binding.suMail.getText().toString().trim().isEmpty()) {
                         if (user != null) {
+                            binding.pg.setVisibility(View.VISIBLE);
                             AuthCredential credential = EmailAuthProvider.getCredential(email, password);
                             user.reauthenticate(credential)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -111,44 +116,27 @@ public class updateData extends AppCompatActivity {
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
-                                                            // Email verification sent successfully
-
-                                                                            // Email updated successfully, now update password
-                                                                            user.updatePassword(binding.suPass.getText().toString())
-                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Void aVoid) {
-
-                                                                                            // Update user profile data
-                                                                                            UserProfile userProfile = new UserProfile(binding.suUser.getText().toString(),binding.suPass.getText().toString(), binding.suMail.getText().toString());
-                                                                                            firebaseDatabase.getReference().child("userProfiles")
-                                                                                                    .child(Objects.requireNonNull(firebaseAuth.getUid()))
-                                                                                                    .setValue(userProfile)
-                                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                        @Override
-                                                                                                        public void onSuccess(Void aVoid) {
-                                                                                                            // User profile data updated successfully
-                                                                                                            finish();
-                                                                                                        }
-                                                                                                    })
-                                                                                                    .addOnFailureListener(new OnFailureListener() {
-                                                                                                        @Override
-                                                                                                        public void onFailure(@NonNull Exception e) {
-                                                                                                            // User profile data update failed
-                                                                                                            binding.pg.setVisibility(View.GONE);
-                                                                                                            Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                                                                                        }
-                                                                                                    });
-                                                                                        }
-                                                                                    })
-                                                                                    .addOnFailureListener(new OnFailureListener() {
-                                                                                        @Override
-                                                                                        public void onFailure(@NonNull Exception e) {
-                                                                                            // Password update failed
-                                                                                            binding.pg.setVisibility(View.GONE);
-                                                                                            Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                                                                        }
-                                                                                    });
+                                                            if(Objects.requireNonNull(binding.suPass.getText()).toString().trim().equals(password.trim()) && Objects.requireNonNull(binding.suUser.getText()).toString().trim().equals(userName.trim()) ){
+                                                                UserProfile userProfile = new UserProfile(binding.suUser.getText().toString(), binding.suPass.getText().toString(), binding.suMail.getText().toString());
+                                                                firebaseDatabase.getReference().child("userProfiles")
+                                                                        .child(Objects.requireNonNull(firebaseAuth.getUid()))
+                                                                        .setValue(userProfile)
+                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+                                                                                // User profile data updated successfully
+                                                                                finish();
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                // User profile data update failed
+                                                                                binding.pg.setVisibility(View.GONE);
+                                                                                Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        });
+                                                            }
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -170,72 +158,113 @@ public class updateData extends AppCompatActivity {
                                         }
                                     });
 
+                        }
 
-//                            if (!Objects.requireNonNull(binding.suMail.getText()).toString().trim().equals(email.trim())) {
-//                                user.updateEmail(binding.suMail.getText().toString())
-//                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                            @Override
-//                                            public void onSuccess(Void aVoid) {
-//                                                // Email updated successfully
-//                                                emailUpdated = true;
-//                                            }
-//                                        })
-//                                        .addOnFailureListener(new OnFailureListener() {
-//                                            @Override
-//                                            public void onFailure(@NonNull Exception e) {
-//                                                // Email update failed
-//                                                binding.pg.setVisibility(View.GONE);
-//                                                Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        });
-//                            } else {
-//                                emailUpdated = true;
-//                            }
-//                            if (emailUpdated) {
-//                                if (!Objects.requireNonNull(binding.suPass.getText()).toString().trim().equals(password.trim())) {
-//                                    user.updatePassword(binding.suPass.getText().toString())
-//                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                @Override
-//                                                public void onSuccess(Void aVoid) {
-//                                                    // Password updated successfully
-//                                                    firebaseDatabase.getReference().child("userProfiles")
-//                                                            .child(Objects.requireNonNull(firebaseAuth.getUid()))
-//                                                            .setValue(userProfile)
-//                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                                @Override
-//                                                                public void onSuccess(Void aVoid) {
-//                                                                    // User profile data updated successfully
-//                                                                    finish();
-//                                                                }
-//                                                            })
-//                                                            .addOnFailureListener(new OnFailureListener() {
-//                                                                @Override
-//                                                                public void onFailure(@NonNull Exception e) {
-//                                                                    // User profile data update failed
-//                                                                    binding.pg.setVisibility(View.GONE);
-//                                                                    Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//                                                                }
-//                                                            });
-//                                                }
-//                                            })
-//                                            .addOnFailureListener(new OnFailureListener() {
-//                                                @Override
-//                                                public void onFailure(@NonNull Exception e) {
-//                                                    // Password update failed
-//                                                    binding.pg.setVisibility(View.GONE);
-//                                                    Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            });
-//
-//                                } else {
-//                                    firebaseDatabase.getReference().child("userProfiles")
-//                                            .child(Objects.requireNonNull(firebaseAuth.getUid()))
-//                                            .setValue(userProfile)
-//                                            .addOnSuccessListener(aVoid -> {
-//                                                finish();
-//                                            });
-//                                }
-//                            }
+                    } else {
+                        binding.pg.setVisibility(View.GONE);
+                        if (binding.suUser.getText().toString().trim().isEmpty()) {
+                            Toast.makeText(updateData.this, "Username must not be empty !", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(updateData.this, checkMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                //----------------------------------------------
+
+                if (!Objects.requireNonNull(binding.suPass.getText()).toString().trim().equals(password.trim())) {
+                    if (userValidationReceived && !binding.suPass.getText().toString().trim().isEmpty()) {
+                        if (user != null) {
+
+                            AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+                            user.reauthenticate(credential)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            user.updatePassword(binding.suPass.getText().toString())
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            if(Objects.requireNonNull(binding.suUser.getText()).toString().trim().equals(userName.trim()) ){
+                                                                UserProfile userProfile = new UserProfile(binding.suUser.getText().toString(), binding.suPass.getText().toString(), binding.suMail.getText().toString());
+                                                                firebaseDatabase.getReference().child("userProfiles")
+                                                                        .child(Objects.requireNonNull(firebaseAuth.getUid()))
+                                                                        .setValue(userProfile)
+                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+                                                                                // User profile data updated successfully
+                                                                                finish();
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                // User profile data update failed
+                                                                                binding.pg.setVisibility(View.GONE);
+                                                                                Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            // Password update failed
+                                                            binding.pg.setVisibility(View.GONE);
+                                                            Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Re-authentication failed
+                                            binding.pg.setVisibility(View.GONE);
+                                            Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+
+                    } else {
+                        binding.pg.setVisibility(View.GONE);
+                        if (Objects.requireNonNull(binding.suUser.getText()).toString().trim().isEmpty()) {
+                            Toast.makeText(updateData.this, "Username must not be empty !", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(updateData.this, checkMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+
+                //--------------------------------------
+                if (!Objects.requireNonNull(binding.suUser.getText()).toString().trim().equals(userName.trim())) {
+                    if (userValidationReceived && !binding.suUser.getText().toString().trim().isEmpty()) {
+                        if (user != null) {
+
+                            // Update user profile data
+                            UserProfile userProfile = new UserProfile(binding.suUser.getText().toString(), binding.suPass.getText().toString(), binding.suMail.getText().toString());
+                            firebaseDatabase.getReference().child("userProfiles")
+                                    .child(Objects.requireNonNull(firebaseAuth.getUid()))
+                                    .setValue(userProfile)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // User profile data updated successfully
+                                            finish();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // User profile data update failed
+                                            binding.pg.setVisibility(View.GONE);
+                                            Toast.makeText(updateData.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
                         }
 
                     } else {
@@ -247,6 +276,12 @@ public class updateData extends AppCompatActivity {
                         }
                     }
                 } else {
+                    binding.pg.setVisibility(View.GONE);
+                }
+
+                if (Objects.requireNonNull(binding.suUser.getText()).toString().trim().equals(userName.trim()) &&
+                        Objects.requireNonNull(binding.suMail.getText()).toString().trim().equals(email.trim()) &&
+                        Objects.requireNonNull(binding.suPass.getText()).toString().trim().equals(password.trim())){
                     binding.pg.setVisibility(View.GONE);
                     Toast.makeText(updateData.this, "Make any changes to update !", Toast.LENGTH_SHORT).show();
                 }

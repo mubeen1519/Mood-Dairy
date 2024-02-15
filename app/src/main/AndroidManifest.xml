@@ -4,8 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission
         android:name="android.permission.USE_BIOMETRIC"
         android:requiredFeature="false" />
@@ -20,6 +24,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodApp"
         tools:targetApi="31">
+        <activity
+            android:name=".AdjustWordSize"
+            android:exported="false" />
+        <activity
+            android:name=".ReminderSetter"
+            android:exported="false" />
         <activity
             android:name=".ThemeChange"
             android:exported="false" />
@@ -39,6 +49,18 @@
             android:name=".sign_up"
             android:exported="false"
             android:theme="@style/Theme.MoodCheckApp" />
+
+        <receiver
+            android:name=".Reminder.NotifyHandler"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".Login_screen"
             android:exported="true"

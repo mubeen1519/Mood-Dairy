@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/DialogColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_data"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_52sdp"
+        android:paddingHorizontal="@dimen/_20sdp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/su_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:fontFamily="@font/monserratmedium"
+            android:hint="New to-do"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.ozcanalasalvar.datepicker.view.timepicker.TimePicker
+        android:id="@+id/timepicker"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        app:darkModeEnabled="true"
+        app:is24HourViewEnabled="false"
+        app:offset="2"
+        app:textSize="17" />
+
+    <com.ozcanalasalvar.datepicker.view.datepicker.DatePicker
+        android:id="@+id/datepicker"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_height="@dimen/_70sdp"
+        app:darkModeEnabled="true"
+        app:offset="3"
+        app:textSize="17" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_close"
+        android:background="@drawable/backicon"
+        android:layout_width="@dimen/_285sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:fontFamily="@font/monserratmedium"
+        android:text="Activate Reminder"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:visibility="visible"/>
+
+</LinearLayout>

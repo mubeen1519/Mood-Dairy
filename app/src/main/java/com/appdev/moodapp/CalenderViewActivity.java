@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.appdev.moodapp.Fragments.BoardScreen;
+import com.appdev.moodapp.Fragments.CategoryFragment;
 import com.appdev.moodapp.Fragments.homePage;
 import com.appdev.moodapp.Fragments.settingsScreen;
 import com.appdev.moodapp.Utils.Utils;
@@ -128,7 +129,7 @@ public class CalenderViewActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.Diary) {
                 loadFragment(new homePage(), false);
             } else if (item.getItemId() == R.id.Category) {
-//                    loadFragment(new HomeFragment(getApplicationContext()),false);
+                    loadFragment(new CategoryFragment(),false);
             } else if (item.getItemId() == R.id.Board) {
                 loadFragment(new BoardScreen(), false);
             } else if (item.getItemId() == R.id.Settings) {

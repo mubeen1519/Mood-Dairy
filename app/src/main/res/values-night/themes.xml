@@ -17,13 +17,18 @@
         <item name="android:background">@color/nightbottom</item>
     </style>
 
+    <style name="switchTheme">
+        <item name="trackTint">@drawable/track_selector</item>
+        <item name="thumbTint">@drawable/thumb_night</item>
+    </style>
+
 
     <style name="Background"><item name="android:background">@color/black</item></style>
     <style name="ViewsBackground"><item name="android:background">@color/nightViewBack</item></style>
     <style name="WordColor"><item name="android:textColor">@color/white</item></style>
     <style name="ComponentsColor"><item name="android:tint">@color/white</item></style>
     <style name="DividerColor"><item name="android:background">@color/white</item></style>
-    <style name="DialogColor"><item name="android:background">@color/black</item></style>
+    <style name="DialogColor"><item name="android:background">@color/nightbottom</item></style>
 
 
     <style name="WordSeeAll"><item name="android:textColor">@color/grey_font</item></style>

@@ -19,9 +19,81 @@
     <style name="FabShapeOverlay" parent="">
         <item name="cornerSize">50%</item> <!-- Adjust this value as needed -->
     </style>
+    //-----------------------------------------------
+
+    <style name="TextSizeDefaultDate">
+        <item name="android:textSize">@dimen/_18ssp</item> <!-- Change this to your default text size -->
+    </style>
+    <style name="TextSizeDefaultMonthName">
+        <item name="android:textSize">@dimen/_15ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="SettingsWord">
+        <item name="android:textSize">@dimen/_14ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="TextSizeDefaultTextual">
+        <item name="android:textSize">@dimen/_13ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="WeekRow">
+        <item name="android:textSize">@dimen/_12ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="RadioSize">
+        <item name="android:textSize">@dimen/_11ssp</item> <!-- Change this to your medium text size -->
+    </style>
 
 
-        <style name="BottomBack"><item name="android:background">@color/white</item></style>
+    //-------------------------------------------------
+
+    <style name="TextSizeMediumDate">
+        <item name="android:textSize">@dimen/_20ssp</item> <!-- Change this to your default text size -->
+    </style>
+    <style name="TextSizeMediumMonthName">
+        <item name="android:textSize">@dimen/_17ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="SettingsWordMedium">
+        <item name="android:textSize">@dimen/_15ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="TextSizeMediumTextual">
+        <item name="android:textSize">@dimen/_15ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="WeekRowMedium">
+        <item name="android:textSize">@dimen/_13ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="RadioSizeMedium">
+        <item name="android:textSize">@dimen/_13ssp</item> <!-- Change this to your medium text size -->
+    </style>
+
+
+
+//----------------------------------------------
+
+
+    <style name="TextSizeLargeDate">
+        <item name="android:textSize">@dimen/_22ssp</item> <!-- Change this to your default text size -->
+    </style>
+    <style name="TextSizeLargeMonthName">
+        <item name="android:textSize">@dimen/_19ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="SettingsWordLarge">
+        <item name="android:textSize">@dimen/_16ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="TextSizeLargeTextual">
+        <item name="android:textSize">@dimen/_17ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="WeekRowLarge">
+        <item name="android:textSize">@dimen/_14ssp</item> <!-- Change this to your medium text size -->
+    </style>
+    <style name="RadioSizeLarge">
+        <item name="android:textSize">@dimen/_15ssp</item> <!-- Change this to your medium text size -->
+    </style>
+
+
+
+    //----------------------------------------------
+
+    <style name="BottomBack">
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="BottomBackground">
         <item name="android:background">@color/white</item>
     </style>
@@ -31,6 +103,11 @@
         <item name="android:background">@color/white</item>
     </style>
 
+
+    <style name="switchTheme">
+        <item name="trackTint">@drawable/track_selector</item>
+        <item name="thumbTint">@drawable/thumb_selector</item>
+    </style>
 
     <style name="Background">
         <item name="android:background">@color/lig_bkg</item>

@@ -57,6 +57,7 @@
         <TextView
             android:id="@+id/textualData"
             android:layout_width="match_parent"
+            android:paddingEnd="@dimen/_5sdp"
             android:layout_marginTop="1dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_13ssp"

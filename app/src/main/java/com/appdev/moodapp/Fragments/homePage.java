@@ -4,6 +4,7 @@ import static com.kizitonwose.calendar.core.ExtensionsKt.daysOfWeek;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,9 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.DayOfWeek;
 
@@ -30,13 +29,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appdev.moodapp.AddDataActivity;
-import com.appdev.moodapp.CalenderViewActivity;
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
 import com.appdev.moodapp.Utils.DailyData;
 import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.CalendarDayLayoutBinding;
-import com.appdev.moodapp.databinding.CalendarDayLegendContainerBinding;
 import com.appdev.moodapp.databinding.CalenderHeaderBinding;
 import com.appdev.moodapp.databinding.FragmentHomePageBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,13 +52,10 @@ import com.kizitonwose.calendar.view.ViewContainer;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -74,6 +68,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+    String textSizeName;
 
     public homePage() {
         super(R.layout.fragment_home_page);
@@ -84,11 +79,14 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomePageBinding.inflate(inflater, container, false);
-        if(Utils.isDarkModeActivated(requireActivity())){
+        if (Utils.isDarkModeActivated(requireActivity())) {
             Utils.status_bar_dark(requireActivity(), R.color.black);
-        } else{
+        } else {
             Utils.status_bar(requireActivity(), R.color.lig_bkg);
         }
+        SharedPreferences preferences = requireContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+        textSizeName = preferences.getString("text_size", "");
+
         firebaseAuth = FirebaseAuth.getInstance();
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
         binding.pg.setVisibility(View.VISIBLE);
@@ -101,6 +99,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
         return binding.getRoot();
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -283,7 +282,17 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                 textView.setText(String.valueOf(data.getDate().getDayOfMonth()));
 
                 checkDataForDate(data, imageView);
-
+                switch (textSizeName) {
+                    case "medium":
+                        textView.setTextAppearance(R.style.TextSizeMediumTextual);
+                        break;
+                    case "large":
+                        textView.setTextAppearance(R.style.TextSizeLargeTextual);
+                        break;
+                    default:
+                        textView.setTextAppearance(R.style.TextSizeDefaultTextual);
+                        break;
+                }
 
                 if (data.getPosition() == DayPosition.MonthDate) {
                 } else {
@@ -306,7 +315,17 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                     for (int i = 0; i < container.legendLayout.getChildCount(); i++) {
                         TextView tv = (TextView) container.legendLayout.getChildAt(i);
                         tv.setText(daysOfWeek.get(i).getDisplayName(TextStyle.SHORT, Locale.getDefault()).toUpperCase(Locale.getDefault()));
-                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
+                        switch (textSizeName) {
+                            case "medium":
+                                tv.setTextAppearance(R.style.WeekRowMedium);
+                                break;
+                            case "large":
+                                tv.setTextAppearance(R.style.WeekRowLarge);
+                                break;
+                            default:
+                                tv.setTextAppearance(R.style.WeekRow);
+                                break;
+                        }
 
                         Typeface customTypeface = ResourcesCompat.getFont(container.getView().getContext(), R.font.monserratmedium);
                         tv.setTypeface(customTypeface);

@@ -24,6 +24,7 @@
             android:layout_height="@dimen/_32sdp"/>
         <TextView
             android:layout_width="wrap_content"
+            android:id="@+id/fp"
             android:layout_marginTop="1dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
@@ -36,8 +37,7 @@
             android:id="@+id/fingerprintSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:trackTint="@drawable/track_selector"
-            app:thumbTint="@drawable/thumb_selector"
+            style="@style/switchTheme"
             android:layout_gravity="end"
             android:paddingStart="@dimen/_8sdp" />
 
@@ -61,6 +61,7 @@
             android:layout_height="@dimen/_32sdp"/>
         <TextView
             android:layout_width="wrap_content"
+            android:id="@+id/rem"
             android:layout_marginTop="1dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
@@ -88,6 +89,7 @@
             android:layout_height="@dimen/_32sdp"/>
         <TextView
             android:layout_width="wrap_content"
+            android:id="@+id/tc"
             android:layout_marginTop="1dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
@@ -116,6 +118,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_marginTop="1dp"
+            android:id="@+id/pp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
             android:gravity="center"
@@ -143,6 +146,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_marginTop="1dp"
+            android:id="@+id/ps"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
             android:gravity="center"
@@ -170,6 +174,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_marginTop="1dp"
+            android:id="@+id/ats"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_12sdp"
             android:gravity="center"

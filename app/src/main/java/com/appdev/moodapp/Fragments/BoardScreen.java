@@ -1,17 +1,17 @@
 package com.appdev.moodapp.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -19,27 +19,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.appdev.moodapp.CalenderViewActivity;
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
 import com.appdev.moodapp.Utils.DailyData;
 import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.FragmentBoardScreenBinding;
-import com.appdev.moodapp.databinding.FragmentHomePageBinding;
 import com.appdev.moodapp.timeline;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -53,13 +46,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.Random;
-
-import io.github.farshidroohi.ChartEntity;
 
 
 public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar {
@@ -69,6 +57,7 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
     private DailyDataAdapter adapter;
     private List<DailyData> dataList;
 
+    String textSizeName;
 
     //    private final List<String> legendArr = new ArrayList<String>();
 //private final List<String> legendArr = new ArrayList<String>() {{
@@ -78,6 +67,7 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
 //    add("12/16");
 //    add("12/21");
 //}};
+
     private FirebaseAuth firebaseAuth;
 
     public BoardScreen() {
@@ -97,8 +87,14 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
         firebaseAuth = FirebaseAuth.getInstance();
         binding.rcProgress.setVisibility(View.VISIBLE);
 
+        SharedPreferences preferences = requireContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+        textSizeName = preferences.getString("text_size", "");
+
+
+
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
         binding.rcProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.common), PorterDuff.Mode.SRC_IN);
+
 
         LocalDate currentDate = LocalDate.now();
 
@@ -199,6 +195,7 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
                         binding.pg.setVisibility(View.GONE);
                         binding.progressLayout.setVisibility(View.VISIBLE);
                         binding.progressPercent.setVisibility(View.VISIBLE);
+
                     } else {
                         binding.pg.setVisibility(View.GONE);
                         binding.rcProgress.setVisibility(View.GONE);
@@ -211,6 +208,7 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
                         binding.progressPercent.setVisibility(View.VISIBLE);
                         binding.nodata.setVisibility(View.VISIBLE);
                     }
+
                 }
 
                 @Override
@@ -231,130 +229,45 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
         });
 
 
-
-
-//
-//        for (int day = 1; day <= 31; day++) {
-//            legendArr.add(String.format(Locale.getDefault(),"12/%02d", day));
-//        }
-//
-//        generateRandomValues();
-//
-//        // Convert lineValues to Entry array
-//        float[] lineEntries = new float[lineValues.size()];
-//        for (int i = 0; i < lineValues.size(); i++) {
-//            lineEntries[i] = lineValues.get(i);
-//        }
-//
-//        ChartEntity firstChartEntity = new ChartEntity(Color.argb(255, 25, 104, 199), firstChartGraph1());
-//
-//
-//        // Create list and add ChartEntity
-//        List<ChartEntity> list = new ArrayList<>();
-//        list.add(firstChartEntity);
-//
-//        // Set legend and list to LineChart
-//       binding.lineChart.setLegend(legendArr);
-//       binding.lineChart.setList(list);
-
-        ArrayList<Entry> linevalues = new ArrayList<>();
-        linevalues.add(new Entry(0, 20f));
-        linevalues.add(new Entry(1, 30f));
-        linevalues.add(new Entry(2, 40f));
-        linevalues.add(new Entry(3, 50f));
-        linevalues.add(new Entry(4, 60f));
-
-        LineDataSet linedataset = new LineDataSet(linevalues, "First");
-        linedataset.setColor(getResources().getColor(R.color.common));
-        linedataset.setCircleRadius(4f);
-        linedataset.setDrawFilled(true);
-        linedataset.setValueTextSize(10F);
-//        linedataset.setFillColor(getResources().getColor(R.color.green));
-        linedataset.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-
-//        List<String> xAxisLabels = new ArrayList<>();
-//        xAxisLabels.add("12/01");
-//        xAxisLabels.add("12/07");
-//        xAxisLabels.add("12/14");
-//        xAxisLabels.add("12/21");
-//        xAxisLabels.add("12/28");
-
-
-        LineData data = new LineData(linedataset);
-        binding.getTheGraph.setData(data);
-
-        // Set custom x-axis labels
-        XAxis xAxis = binding.getTheGraph.getXAxis();
-//        xAxis.setValueFormatter(new ValueFormatter() {
-//            @Override
-//            public String getAxisLabel(float value, AxisBase axis) {
-//                int intValue = (int) value;
-//                if (intValue >= 0 && intValue < xAxisLabels.size()) {
-//                    return xAxisLabels.get(intValue);
-//                } else {
-//                    return "";
-//                }
-//            }
-//        });
-
-        binding.getTheGraph.setBackgroundColor(getResources().getColor(R.color.white));
-        binding.getTheGraph.animateXY(2000, 2000, Easing.EaseInCubic);
-//
-//
-//        ArrayList<Entry> linevalues = new ArrayList<>();
-//        linevalues.add(new Entry(20f, 0.0F));
-//        linevalues.add(new Entry(27f, 7.0F));
-//        linevalues.add(new Entry(30f, 3.0F));
-//        linevalues.add(new Entry(40f, 2.0F));
-//        linevalues.add(new Entry(50f, 1.0F));
-//        linevalues.add(new Entry(60f, 8.0F));
-//        linevalues.add(new Entry(70f, 10.0F));
-//        linevalues.add(new Entry(80f, 1.0F));
-//        linevalues.add(new Entry(90f, 2.0F));
-//        linevalues.add(new Entry(100f, 5.0F));
-//        linevalues.add(new Entry(110f, 1.0F));
-//        linevalues.add(new Entry(120f, 20.0F));
-//        linevalues.add(new Entry(130f, 40.0F));
-//        linevalues.add(new Entry(140f, 50.0F));
-//
-//        LineDataSet linedataset = new LineDataSet(linevalues, "First");
-//        linedataset.setColor(getResources().getColor(R.color.common));
-//        linedataset.setCircleRadius(4f);
-//        linedataset.setDrawFilled(true);
-//        linedataset.setValueTextSize(10F);
-////        linedataset.setFillColor(getResources().getColor(R.color.green));
-//        linedataset.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//
-//        LineData data = new LineData(linedataset);
-//
-//        LineChart lineChart = binding.getTheGraph;
-//        lineChart.setData(data);
-//        lineChart.setBackgroundColor(getResources().getColor(R.color.white));
-//        lineChart.animateXY(2000, 2000, Easing.EaseInCubic);
-
-//        Description description = new Description();
-//        description.setText("Mood Flow");
-//        description.setPosition(150f,15f);
-//        lineChart.setDescription(description);
-//        lineChart.getAxisRight().setDrawLabels(false);
-//
-//        vValues = Arrays.asList("12/01","12/06","12/11","12/16","12/21");
-//        XAxis Axis = lineChart.getXAxis();
-//        Axis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        Axis.setValueFormatter(new IndexAxisValueFormatter(vValues));
-//        Axis.setLabelCount(5);
-//        Axis.setGranularity(1f);
-//
-//
-//        YAxis yAxis = lineChart.getAxisLeft();
-//        Axis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        Axis.setValueFormatter(new IndexAxisValueFormatter(vValues));
-//        Axis.setLabelCount(5);
-//        Axis.setGranularity(1f);
-
-
         return binding.getRoot();
     }
+    public void forDefault() {
+        binding.moodflow.setTextAppearance(R.style.TextSizeDefaultTextual);
+        binding.barmood.setTextAppearance(R.style.TextSizeDefaultTextual);
+        binding.timelinebtn.setTextAppearance(R.style.WeekRow);
+        binding.timeline.setTextAppearance(R.style.WeekRow);
+        binding.happyPercentage.setTextAppearance(R.style.RadioSize);
+        binding.smilePercentage.setTextAppearance(R.style.RadioSize);
+        binding.neutralPercentage.setTextAppearance(R.style.RadioSize);
+        binding.sadPercentage.setTextAppearance(R.style.RadioSize);
+        binding.cryPercentage.setTextAppearance(R.style.RadioSize);
+    }
+
+    public void forMedium() {
+        binding.moodflow.setTextAppearance(R.style.TextSizeMediumTextual);
+        binding.barmood.setTextAppearance(R.style.TextSizeMediumTextual);
+        binding.timelinebtn.setTextAppearance(R.style.WeekRowMedium);
+        binding.timeline.setTextAppearance(R.style.WeekRowMedium);
+        binding.happyPercentage.setTextAppearance(R.style.RadioSizeMedium);
+        binding.smilePercentage.setTextAppearance(R.style.RadioSizeMedium);
+        binding.neutralPercentage.setTextAppearance(R.style.RadioSizeMedium);
+        binding.sadPercentage.setTextAppearance(R.style.RadioSizeMedium);
+        binding.cryPercentage.setTextAppearance(R.style.RadioSizeMedium);
+    }
+
+    public void forLarge() {
+        binding.moodflow.setTextAppearance(R.style.TextSizeLargeTextual);
+        binding.barmood.setTextAppearance(R.style.TextSizeLargeTextual);
+        binding.timelinebtn.setTextAppearance(R.style.WeekRowLarge);
+        binding.timeline.setTextAppearance(R.style.WeekRowLarge);
+        binding.happyPercentage.setTextAppearance(R.style.RadioSizeLarge);
+        binding.smilePercentage.setTextAppearance(R.style.RadioSizeLarge);
+        binding.neutralPercentage.setTextAppearance(R.style.RadioSizeLarge);
+        binding.sadPercentage.setTextAppearance(R.style.RadioSizeLarge);
+        binding.cryPercentage.setTextAppearance(R.style.RadioSizeLarge);
+    }
+
+
 
     //    private void generateRandomValues() {
 //        Random random = new Random();
@@ -369,6 +282,17 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        switch (textSizeName) {
+            case "medium":
+                forMedium();
+                break;
+            case "large":
+                forLarge();
+                break;
+            default:
+                forDefault();
+                break;
+        }
 
     }
 

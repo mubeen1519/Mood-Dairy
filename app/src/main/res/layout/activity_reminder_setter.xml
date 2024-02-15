@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReminderSetter">
+
+    <LinearLayout
+        android:id="@+id/up_layout"
+        style="@style/Background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <ImageView
+            android:id="@+id/back"
+            style="@style/ComponentsColor"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_chevron_left" />
+
+        <TextView
+            android:id="@+id/titleMonth"
+            style="@style/WordColor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="Reminder Settings"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_data"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_52sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:paddingHorizontal="@dimen/_17sdp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/su_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:fontFamily="@font/monserratmedium"
+            android:hint="New to-do"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.ozcanalasalvar.datepicker.view.timepicker.TimePicker
+        android:id="@+id/timepicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        app:darkModeEnabled="true"
+        app:is24HourViewEnabled="false"
+        app:offset="2"
+        app:textSize="16" />
+
+    <com.ozcanalasalvar.datepicker.view.datepicker.DatePicker
+        android:id="@+id/datepicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:darkModeEnabled="true"
+        android:paddingHorizontal="@dimen/_8sdp"
+        app:offset="3"
+        app:textSize="16" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_close"
+        android:layout_width="@dimen/_275sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:background="@drawable/backicon"
+        android:fontFamily="@font/monserratmedium"
+        android:text="Activate Reminder"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+
+</LinearLayout>

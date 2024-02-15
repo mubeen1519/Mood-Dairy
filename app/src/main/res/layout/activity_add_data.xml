@@ -84,12 +84,13 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:id="@+id/howWas"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:paddingStart="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_5sdp"
             style="@style/WordColor"
-            android:textSize="16sp"
+            android:textSize="@dimen/_12ssp"
             android:text="How was your day ?" />
 
         <LinearLayout
@@ -264,12 +265,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/writeAbout"
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/poppins_medium"
             android:paddingStart="@dimen/_8sdp"
             android:paddingEnd="@dimen/_1sdp"
             style="@style/WordColor"
-            android:textSize="16sp"
+            android:textSize="@dimen/_12ssp"
             android:text="Write about today"/>
 
         <View
@@ -310,9 +312,10 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:paddingStart="@dimen/_8sdp"
+            android:id="@+id/yourPhotos"
             android:layout_marginTop="@dimen/_5sdp"
             style="@style/WordColor"
-            android:textSize="16sp"
+            android:textSize="@dimen/_12ssp"
             android:text="Your photos" />
 
         <LinearLayout

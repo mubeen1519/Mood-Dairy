@@ -29,7 +29,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.appdev.moodapp.AdjustWordSize;
 import com.appdev.moodapp.R;
+import com.appdev.moodapp.ReminderSetter;
 import com.appdev.moodapp.ThemeChange;
 import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.FragmentSettingsScreenBinding;
@@ -40,10 +42,8 @@ import java.util.concurrent.Executor;
 
 
 public class settingsScreen extends Fragment {
-
     private FragmentSettingsScreenBinding binding; // Declare the binding object
-
-
+    String textSizeName;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment using view binding
@@ -54,6 +54,9 @@ public class settingsScreen extends Fragment {
             Utils.status_bar(requireActivity(), R.color.lig_bkg);
         }
 
+        SharedPreferences preferences = requireContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+        textSizeName = preferences.getString("text_size", "");
+
         binding.themeChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +64,19 @@ public class settingsScreen extends Fragment {
                 requireActivity().finish();
             }
         });
+
+
+        switch (textSizeName) {
+            case "medium":
+                forMedium();
+                break;
+            case "large":
+                forLarge();
+                break;
+            default:
+                forDefault();
+                break;
+        }
 
         binding.fingerprintSwitch.setChecked(Utils.getBoolean(requireContext()));
         binding.fingerprintSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -97,7 +113,19 @@ public class settingsScreen extends Fragment {
                 requireContext().startActivity(new Intent(requireActivity(), updateData.class));
             }
         });
+        binding.reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireContext().startActivity(new Intent(requireActivity(), ReminderSetter.class));
+            }
+        });
 
+        binding.AdjustText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireContext().startActivity(new Intent(requireActivity(), AdjustWordSize.class));
+            }
+        });
         return binding.getRoot(); // Return the root view of the binding
     }
 
@@ -154,6 +182,31 @@ public class settingsScreen extends Fragment {
         }
     }
 
+    public void forDefault() {
+        binding.fp.setTextAppearance(R.style.SettingsWord);
+        binding.rem.setTextAppearance(R.style.SettingsWord);
+        binding.tc.setTextAppearance(R.style.SettingsWord);
+        binding.pp.setTextAppearance(R.style.SettingsWord);
+        binding.ats.setTextAppearance(R.style.SettingsWord);
+        binding.ps.setTextAppearance(R.style.SettingsWord);
+    }
+    public void forMedium() {
+        binding.fp.setTextAppearance(R.style.SettingsWordMedium);
+        binding.rem.setTextAppearance(R.style.SettingsWordMedium);
+        binding.tc.setTextAppearance(R.style.SettingsWordMedium);
+        binding.pp.setTextAppearance(R.style.SettingsWordMedium);
+        binding.ats.setTextAppearance(R.style.SettingsWordMedium);
+        binding.ps.setTextAppearance(R.style.SettingsWordMedium);
+    }
+
+    public void forLarge() {
+        binding.fp.setTextAppearance(R.style.SettingsWordLarge);
+        binding.rem.setTextAppearance(R.style.SettingsWordLarge);
+        binding.tc.setTextAppearance(R.style.SettingsWordLarge);
+        binding.pp.setTextAppearance(R.style.SettingsWordLarge);
+        binding.ats.setTextAppearance(R.style.SettingsWordLarge);
+        binding.ps.setTextAppearance(R.style.SettingsWordLarge);
+    }
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

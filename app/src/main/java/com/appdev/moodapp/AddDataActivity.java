@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,6 +51,7 @@ public class AddDataActivity extends AppCompatActivity {
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
     StorageReference storageReference = firebaseStorage.getReference();
+    String textSizeName;
 
 
     @Override
@@ -61,6 +64,9 @@ public class AddDataActivity extends AppCompatActivity {
         } else{
             Utils.status_bar(AddDataActivity.this, R.color.lig_bkg);
         }
+
+        SharedPreferences preferences = getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+        textSizeName = preferences.getString("text_size", "");
 
         int day = getIntent().getIntExtra("day", -1);
         int month = getIntent().getIntExtra("month", -1);
@@ -113,6 +119,18 @@ public class AddDataActivity extends AppCompatActivity {
         binding.RcImages.setAdapter(adapter);
         binding.loadingLayout.setVisibility(View.VISIBLE);
         binding.myView.setText(R.string.loader);
+
+        switch (textSizeName) {
+            case "medium":
+                forMedium();
+                break;
+            case "large":
+                forLarge();
+                break;
+            default:
+                forDefault();
+                break;
+        }
 
         database.getReference().child("users")
                 .child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())
@@ -260,6 +278,25 @@ public class AddDataActivity extends AppCompatActivity {
         });
 
 
+    }
+    public void forDefault() {
+        binding.howWas.setTextAppearance(R.style.WeekRow);
+        binding.writeData.setTextAppearance(R.style.WeekRow);
+        binding.writeAbout.setTextAppearance(R.style.WeekRow);
+        binding.yourPhotos.setTextAppearance(R.style.WeekRow);
+    }
+    public void forMedium() {
+        binding.howWas.setTextAppearance(R.style.WeekRowMedium);
+        binding.writeData.setTextAppearance(R.style.WeekRowMedium);
+        binding.writeAbout.setTextAppearance(R.style.WeekRowMedium);
+        binding.yourPhotos.setTextAppearance(R.style.WeekRowMedium);
+    }
+
+    public void forLarge() {
+        binding.howWas.setTextAppearance(R.style.WeekRowLarge);
+        binding.writeData.setTextAppearance(R.style.WeekRowLarge);
+        binding.writeAbout.setTextAppearance(R.style.WeekRowLarge);
+        binding.yourPhotos.setTextAppearance(R.style.WeekRowLarge);
     }
 
     private void saveDailyDataToDatabase(String currentDate, String selectedEmoji, String textualData, List<String> imageUriStrings, String yearStr, String monthStr, String dayStr) {
