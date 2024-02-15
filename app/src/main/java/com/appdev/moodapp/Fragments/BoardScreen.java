@@ -30,6 +30,7 @@ import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -89,7 +90,6 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
 
         SharedPreferences preferences = requireContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
         textSizeName = preferences.getString("text_size", "");
-
 
 
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
@@ -164,6 +164,40 @@ public class BoardScreen extends BaseFragment implements BaseFragment.HasToolbar
                                 neutralPercentage = (int) ((neutralCount / (float) totalMoods) * totalPercentage);
                                 sadPercentage = (int) ((sadCount / (float) totalMoods) * totalPercentage);
                                 cryPercentage = (int) ((cryCount / (float) totalMoods) * totalPercentage);
+
+                                ArrayList<Entry> entries = new ArrayList<>();
+                                entries.add(new Entry(0, happyPercentage)); // Assuming the first day of the month is at index 0
+                                entries.add(new Entry(1, smilePercentage));
+                                entries.add(new Entry(2, neutralPercentage));
+                                entries.add(new Entry(3, sadPercentage));
+                                entries.add(new Entry(4, cryPercentage));
+
+                                // Create LineDataSet and LineData
+                                LineDataSet dataSet = new LineDataSet(entries, "Mood");
+                                LineData lineData = new LineData(dataSet);
+
+                                // Set LineData to LineChart
+                                LineChart lineChart = binding.chart1;
+                                lineChart.getDescription().setEnabled(false);
+                                lineChart.setDrawGridBackground(false);
+                                lineChart.setData(lineData);
+                                lineChart.getAxisRight().setEnabled(false);
+                                // Customize Axes if needed
+                                XAxis xAxis = lineChart.getXAxis();
+                                // Customize xAxis if needed
+                                xAxis.setDrawLimitLinesBehindData(false);
+                                XAxis.XAxisPosition position = XAxis.XAxisPosition.BOTTOM;
+                                xAxis.setPosition(position);
+                                xAxis.setDrawGridLines(false);
+
+
+
+                                YAxis yAxis = lineChart.getAxisLeft();
+                                yAxis.setDrawGridLines(false);
+                                // Customize yAxis if needed
+
+                                // Refresh Chart
+                                lineChart.invalidate();
 
                                 setProgressBarWeight(binding.Progress1, happyPercentage);
                                 setProgressBarWeight(binding.Progress2, smilePercentage);
