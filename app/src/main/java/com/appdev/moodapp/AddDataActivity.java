@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,8 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -31,7 +34,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -53,17 +58,19 @@ public class AddDataActivity extends AppCompatActivity {
     StorageReference storageReference = firebaseStorage.getReference();
     String textSizeName;
 
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAddDataBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        if(Utils.isDarkModeActivated(AddDataActivity.this)){
+        if (Utils.isDarkModeActivated(AddDataActivity.this)) {
             Utils.status_bar_dark(AddDataActivity.this, R.color.black);
-        } else{
+        } else {
             Utils.status_bar(AddDataActivity.this, R.color.lig_bkg);
         }
+        dialog = new Dialog(this);
 
         SharedPreferences preferences = getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
         textSizeName = preferences.getString("text_size", "");
@@ -195,6 +202,7 @@ public class AddDataActivity extends AppCompatActivity {
                 if (textualData.isEmpty()) {
                     Toast.makeText(AddDataActivity.this, "Write something about your day !", Toast.LENGTH_SHORT).show();
                 } else {
+
                     List<String> imageUriStrings = new ArrayList<>();
                     if (isOld) {
                         for (String imageUri : selectedImageString) {
@@ -220,8 +228,7 @@ public class AddDataActivity extends AppCompatActivity {
                                         Toast.makeText(AddDataActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                                     });
                         }
-                    }
-                    else if (count == 0 && selectedImageString.isEmpty()) {
+                    } else if (count == 0 && selectedImageString.isEmpty()) {
                         saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, imageUriStrings, yearStr, monthStr, dayStr);
                     } else if (count == 0 && selectedImageString.size() > 0) {
                         saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, selectedImageString, yearStr, monthStr, dayStr);
@@ -278,13 +285,36 @@ public class AddDataActivity extends AppCompatActivity {
         });
 
 
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog);
+        Button buttonClose = dialog.findViewById(R.id.close_btn);
+        buttonClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                int totalPoints = sharedPreferences.getInt("totalPoints", 0);
+                totalPoints += 100;
+                editor.putInt("totalPoints", totalPoints);
+                editor.apply();
+                Toast.makeText(AddDataActivity.this, "Claimed Successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(AddDataActivity.this, CalenderViewActivity.class));
+                finish();
+                dialog.dismiss();
+            }
+        });
+
+
     }
+
     public void forDefault() {
         binding.howWas.setTextAppearance(R.style.WeekRow);
         binding.writeData.setTextAppearance(R.style.WeekRow);
         binding.writeAbout.setTextAppearance(R.style.WeekRow);
         binding.yourPhotos.setTextAppearance(R.style.WeekRow);
     }
+
     public void forMedium() {
         binding.howWas.setTextAppearance(R.style.WeekRowMedium);
         binding.writeData.setTextAppearance(R.style.WeekRowMedium);
@@ -312,13 +342,31 @@ public class AddDataActivity extends AppCompatActivity {
                 .child(yearStr).child(monthStr).child("dailyData").child(dayStr)
                 .setValue(dailyData)
                 .addOnSuccessListener(unused -> {
-                    Toast.makeText(AddDataActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddDataActivity.this, CalenderViewActivity.class));
-                    finish();
+                    SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    String lastStoredDate = sharedPreferences.getString("lastStoredDate", "");
+                    String currentDates = getCurrentDate(); // Implement this method to get current date
+                    if (!currentDates.equals(lastStoredDate)) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("lastStoredDate", currentDates);
+                        // Increment user's total points by 100
+                        editor.apply();
+                        dialog.show();
+                    } else {
+                        Toast.makeText(AddDataActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AddDataActivity.this, CalenderViewActivity.class));
+                        finish();
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(AddDataActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private String getCurrentDate() {
+        // Create a SimpleDateFormat object with the desired date format
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        // Get the current date and format it using the SimpleDateFormat object
+        return sdf.format(new Date());
     }
 
     private void openGallery() {

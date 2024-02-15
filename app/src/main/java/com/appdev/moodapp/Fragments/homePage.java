@@ -87,6 +87,11 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         SharedPreferences preferences = requireContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
         textSizeName = preferences.getString("text_size", "");
 
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        int totalPoints = sharedPreferences.getInt("totalPoints", 0);
+
+        binding.point.setText(String.valueOf(totalPoints));
+
         firebaseAuth = FirebaseAuth.getInstance();
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(requireContext(), R.color.common), PorterDuff.Mode.SRC_IN);
         binding.pg.setVisibility(View.VISIBLE);

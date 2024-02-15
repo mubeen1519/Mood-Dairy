@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    style="@style/DialogColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        style="@style/WordColor"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppinsregular"
+        android:textSize="@dimen/_13ssp"
+        android:text="Diary has been recorded" />
+
+    <ImageView
+        android:id="@+id/dollar"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_gravity="center"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:foreground="@drawable/ripple_effect"
+        app:srcCompat="@drawable/dollar" />
+    <TextView
+        android:id="@+id/point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textSize="@dimen/_15ssp"
+        android:layout_marginTop="@dimen/_5sdp"
+        style="@style/WordColor"
+        android:textStyle="bold"
+        android:text="100 coin" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/close_btn"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/backicon"
+        android:fontFamily="@font/monserratmedium"
+        android:text="Claim"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold" />
+
+
+
+</LinearLayout>

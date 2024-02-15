@@ -35,15 +35,15 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <ImageView
-                android:id="@+id/back"
-                style="@style/ComponentsColor"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:rotation="268"
-                app:srcCompat="@drawable/ic_chevron_left" />
+<!--            <ImageView-->
+<!--                android:id="@+id/back"-->
+<!--                style="@style/ComponentsColor"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--                android:clickable="true"-->
+<!--                android:rotation="268"-->
+<!--                app:srcCompat="@drawable/ic_chevron_left" />-->
 
         </LinearLayout>
 
