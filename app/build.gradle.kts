@@ -60,4 +60,5 @@ dependencies {
     implementation("com.github.ozcanalasalvar.picker:wheelview:2.0.7")
     implementation("androidx.compose.material3:material3:1.2.0-alpha02")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    implementation ("com.github.lecho:hellocharts-library:1.5.8@aar")
 }
