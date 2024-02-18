@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.appdev.moodapp.ModelClasses.Courses;
 import com.appdev.moodapp.databinding.CatCardBinding;
 
