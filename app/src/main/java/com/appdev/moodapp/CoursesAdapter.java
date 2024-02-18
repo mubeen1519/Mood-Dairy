@@ -1,8 +1,11 @@
 package com.appdev.moodapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +54,29 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.ViewHold
         public void bind(Courses course) {
             binding.title.setText(course.getTitle());
             binding.courseBtn.setText(course.getCourses());
+
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openGoogleApp();
+                }
+            });
+            binding.courseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openGoogleApp();
+                }
+            });
+        }
+    }
+    private void openGoogleApp() {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Add this flag to start the activity in a new task
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, "Google app is not installed", Toast.LENGTH_SHORT).show();
         }
     }
 }
+

@@ -34,43 +34,21 @@ public class CategoryFragment extends Fragment {
         // Inflate the layout for this fragment using data binding
         binding = FragmentCategoryBinding.inflate(inflater, container, false);
 
-        binding.compilerWebView.getSettings().setJavaScriptEnabled(true);
-        String url = "https://www.google.com/";
-        binding.compilerWebView.loadUrl(url);
-        binding.compilerWebView.setWebViewClient(new WebViewClient() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
-
-        OnBackPressedCallback onBackInvokedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (binding.compilerWebView.canGoBack())
-                    binding.compilerWebView.goBack();
-                else
-                    requireActivity().finish();
-            }
-        };
-
-        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), onBackInvokedCallback);
 
 
-//        binding.ListRc.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-//        // Create a list of Courses objects
-//        List<Courses> coursesList = new ArrayList<>();
-//        coursesList.add(new Courses("Understanding mental disorders", "10 Courses"));
-//        coursesList.add(new Courses("Mindfulness", "1 Courses"));
-//        coursesList.add(new Courses("Relaxation", "2 Courses"));
-//        coursesList.add(new Courses("Self-confidence", "6 Courses"));
-//
-//        // Create and set the adapter for the RecyclerView
-//        adapter = new CoursesAdapter(getContext(), coursesList);
-//        binding.ListRc.setAdapter(adapter);
+
+        binding.ListRc.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Create a list of Courses objects
+        List<Courses> coursesList = new ArrayList<>();
+        coursesList.add(new Courses("Understanding mental disorders", "10 Courses"));
+        coursesList.add(new Courses("Mindfulness", "1 Courses"));
+        coursesList.add(new Courses("Relaxation", "2 Courses"));
+        coursesList.add(new Courses("Self-confidence", "6 Courses"));
+
+        // Create and set the adapter for the RecyclerView
+        adapter = new CoursesAdapter(getContext(), coursesList);
+        binding.ListRc.setAdapter(adapter);
 
         return binding.getRoot();
     }
