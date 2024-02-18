@@ -41,10 +41,10 @@ public class CategoryFragment extends Fragment {
 
         // Create a list of Courses objects
         List<Courses> coursesList = new ArrayList<>();
-        coursesList.add(new Courses("Understanding mental disorders", "10 Courses"));
-        coursesList.add(new Courses("Mindfulness", "1 Courses"));
-        coursesList.add(new Courses("Relaxation", "2 Courses"));
-        coursesList.add(new Courses("Self-confidence", "6 Courses"));
+        coursesList.add(new Courses("Understanding mental disorders", "10 Courses","https://google.com"));
+        coursesList.add(new Courses("Mindfulness", "1 Courses","https://google.com"));
+        coursesList.add(new Courses("Relaxation", "2 Courses","https://google.com"));
+        coursesList.add(new Courses("Self-confidence", "6 Courses","https://google.com"));
 
         // Create and set the adapter for the RecyclerView
         adapter = new CoursesAdapter(getContext(), coursesList);
