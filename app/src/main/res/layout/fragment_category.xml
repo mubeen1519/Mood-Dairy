@@ -8,26 +8,29 @@
     style="@style/Background"
     android:paddingTop="@dimen/_20sdp"
     tools:context=".Fragments.CategoryFragment">
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/WordColor"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:fontFamily="@font/poppinsregular"
-        android:textSize="@dimen/_15ssp"
-        android:text="Discover" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ListRc"
+    <WebView
+        android:id="@+id/compiler_Web_View"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="match_parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/title"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        style="@style/WordColor"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:fontFamily="@font/poppinsregular"-->
+<!--        android:textSize="@dimen/_15ssp"-->
+<!--        android:text="Discover" />-->
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/ListRc"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginBottom="@dimen/_10sdp"-->
+<!--        android:layout_marginTop="@dimen/_10sdp"-->
+<!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
 
 </LinearLayout>
