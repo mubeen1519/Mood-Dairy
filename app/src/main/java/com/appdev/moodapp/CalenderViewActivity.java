@@ -46,7 +46,8 @@ public class CalenderViewActivity extends AppCompatActivity {
         binding = ActivityCalenderViewBinding.inflate(getLayoutInflater()); // Inflate the binding object
         setContentView(binding.getRoot()); // Set the root view of the layout
         Utils.applyTheme(CalenderViewActivity.this, Utils.getThemeMode(CalenderViewActivity.this));
-        if (Utils.getBoolean(getApplicationContext())) {
+        if (Utils.getBoolean(getApplicationContext()) && !Utils.getEntryBoolean(getApplicationContext())) {
+            Utils.saveEntryBoolean(this,true);
             if (Utils.isFingerprintSensorAvailable(getApplicationContext())) {
                 // Device has a fingerprint sensor
                 if (Utils.hasEnrolledFingerprints(getApplicationContext())) {
@@ -153,5 +154,11 @@ public class CalenderViewActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utils.saveEntryBoolean(this,false);
     }
 }

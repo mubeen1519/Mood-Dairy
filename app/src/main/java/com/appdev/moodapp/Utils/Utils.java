@@ -100,8 +100,24 @@ public class Utils {
 
     private static final String PREF_NAME = "MyPreferences";
     private static final String KEY_BOOLEAN_VALUE = "booleanValue";
+    private static final String KEY_CHECK_VALUE = "checkValue";
 
     // Method to store a boolean value in SharedPreferences
+
+    public static void saveEntryBoolean(Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(KEY_CHECK_VALUE, value);
+        editor.apply();
+    }
+
+    // Method to get a boolean value from SharedPreferences
+    public static boolean getEntryBoolean(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(KEY_CHECK_VALUE, false); // Default value is false if not found
+    }
+
+    // Method to edit (update) a boolean value in SharedPreferences
+
     public static void saveBoolean(Context context, boolean value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean(KEY_BOOLEAN_VALUE, value);
