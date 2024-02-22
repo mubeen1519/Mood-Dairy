@@ -5,6 +5,13 @@
     android:layout_marginHorizontal="@dimen/_6sdp"
     android:layout_height="wrap_content">
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/removeBtn"
+        android:contentDescription="delete"
+        android:layout_gravity="end"
+        android:background="@drawable/baseline_delete_outline_24" />
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/_100sdp"
