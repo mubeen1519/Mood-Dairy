@@ -10,6 +10,11 @@
 
     <style name="Theme.MoodApp" parent="Base.Theme.MoodApp" />
 
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
     <style name="Theme.MoodCheckApp" parent="Theme.Material3.Light.NoActionBar" />
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />

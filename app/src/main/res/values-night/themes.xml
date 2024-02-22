@@ -6,6 +6,10 @@
         <item name="colorPrimaryVariant">@color/nightWord</item>
         <item name="bottomAppBarStyle">@style/BottomBack</item>
     </style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
 
     <style name="BottomBack"><item name="android:background">@color/white</item></style>
 

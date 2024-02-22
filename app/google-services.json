@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "530961484644",
-    "project_id": "elevate-278d7",
-    "storage_bucket": "elevate-278d7.appspot.com"
+    "project_number": "684458421015",
+    "firebase_url": "https://mood-app-d581d-default-rtdb.firebaseio.com",
+    "project_id": "mood-app-d581d",
+    "storage_bucket": "mood-app-d581d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:530961484644:android:050b32c9359670bb108871",
+        "mobilesdk_app_id": "1:684458421015:android:9563993664716541576552",
         "android_client_info": {
           "package_name": "com.appdev.moodapp"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAyR-UwAQpB04OtsEku3Il0-h7rJSsJORk"
+          "current_key": "AIzaSyC1xMV9GDoNCOdegsVJBP4W3gPxzYmdSU0"
         }
       ],
       "services": {

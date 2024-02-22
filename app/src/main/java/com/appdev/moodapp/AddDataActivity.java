@@ -3,21 +3,35 @@ package com.appdev.moodapp;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.appdev.moodapp.Utils.AddImageAdapter;
@@ -33,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,10 +55,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
 
 public class AddDataActivity extends AppCompatActivity {
 
     private ActivityAddDataBinding binding;
+    private ActivityResultLauncher<Void> requestLauncher;
+
+    AlertDialog notificationGuidanceDialog;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private String selectedEmoji = "Neutral";
     int count = 0;
@@ -59,6 +78,9 @@ public class AddDataActivity extends AppCompatActivity {
     String textSizeName;
 
     Dialog dialog;
+    private static final int REQUEST_CODE_PERMISSIONS = 10;
+    private static final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
+    List<String> selectedImageString = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +93,7 @@ public class AddDataActivity extends AppCompatActivity {
             Utils.status_bar(AddDataActivity.this, R.color.lig_bkg);
         }
         dialog = new Dialog(this);
+
 
         SharedPreferences preferences = getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
         textSizeName = preferences.getString("text_size", "");
@@ -85,7 +108,7 @@ public class AddDataActivity extends AppCompatActivity {
         binding.titleMonth.setText(title);
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);
 
-        List<String> selectedImageString = new ArrayList<>();
+
 
 
         String dayStr = String.format(Locale.getDefault(), "%02d", day);
@@ -93,6 +116,9 @@ public class AddDataActivity extends AppCompatActivity {
         String yearStr = String.valueOf(year);
 
         String currentDate = yearStr + "-" + monthStr + "-" + dayStr;
+
+
+        // Retrieve the URI from the intent extras
 
 
         galleryLauncher = registerForActivityResult(
@@ -119,6 +145,9 @@ public class AddDataActivity extends AppCompatActivity {
                         }
                     }
                 });
+        Log.d("FirebaseStorage","AT MAIN "+Utils.URI_IMAGE);
+
+
 
 
         adapter = new AddImageAdapter(selectedImageString, this);
@@ -200,33 +229,43 @@ public class AddDataActivity extends AppCompatActivity {
                 binding.loadingLayout.setVisibility(View.VISIBLE);
                 String textualData = binding.writeData.getText().toString().trim();
                 if (textualData.isEmpty()) {
+                    binding.loadingLayout.setVisibility(View.GONE);
                     Toast.makeText(AddDataActivity.this, "Write something about your day !", Toast.LENGTH_SHORT).show();
                 } else {
 
                     List<String> imageUriStrings = new ArrayList<>();
-                    if (isOld) {
-                        for (String imageUri : selectedImageString) {
-                            String imageName = "image_" + System.currentTimeMillis(); // Generate unique image name
-                            StorageReference imageRef = storageReference.child(imageName);
 
-                            // Upload image to Firebase Storage
-                            imageRef.putFile(Uri.parse(imageUri))
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        // Get the uploaded image URL
-                                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            imageUriStrings.add(imageUrl);
-                                            count++;
-                                            if (count == selectedImageString.size()) {
-                                                saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, imageUriStrings, yearStr, monthStr, dayStr);
-                                            }
+                    if (isOld) {
+                        int size = selectedImageString.size();
+                        for (String imageUri : selectedImageString) {
+                            if (!imageUri.startsWith("https://")) {
+                                // This URI is suitable for upload
+                                String imageName = "image_" + System.currentTimeMillis(); // Generate unique image name
+                                StorageReference imageRef = storageReference.child(imageName);
+
+                                // Upload image to Firebase Storage
+                                int finalSize = size;
+                                imageRef.putFile(Uri.parse(imageUri))
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                                String imageUrl = uri.toString();
+                                                imageUriStrings.add(imageUrl);
+                                                count++;
+                                                if (count == finalSize) {
+                                                    saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, imageUriStrings, yearStr, monthStr, dayStr);
+                                                }
+                                            });
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle any errors during image upload
+                                            Log.d("FirebaseStorage", "Image upload failed: " + e.getMessage()); // Log the error message
+                                            Toast.makeText(AddDataActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(AddDataActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                                         });
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        // Handle any errors during image upload
-                                        Toast.makeText(AddDataActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(AddDataActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                                    });
+                            }else{
+                                size--;
+                                imageUriStrings.add(imageUri);
+                            }
                         }
                     } else if (count == 0 && selectedImageString.isEmpty()) {
                         saveDailyDataToDatabase(currentDate, selectedEmoji, textualData, imageUriStrings, yearStr, monthStr, dayStr);
@@ -239,8 +278,7 @@ public class AddDataActivity extends AppCompatActivity {
         binding.imageSelectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedImageString.clear();
-                openGallery();
+                showDialog();
             }
         });
 
@@ -308,6 +346,88 @@ public class AddDataActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        Utils.URI_IMAGE = "";
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        if (!Utils.URI_IMAGE.isEmpty()) {
+            String uriStringToAdd = Utils.URI_IMAGE;
+
+            // Check if the URI is not already present in the list
+            boolean uriAlreadyExists = false;
+            for (String uri : selectedImageString) {
+                if (uri.equals(uriStringToAdd)) {
+                    uriAlreadyExists = true;
+                    break;
+                }
+            }
+
+            // Add the URI to the list only if it's not already present
+            if (!uriAlreadyExists) {
+                selectedImageString.add(uriStringToAdd);
+                isOld = true;
+                adapter.notifyDataSetChanged();
+            }
+        }
+        super.onResume();
+
+    }
+
+    private boolean allPermissionsGranted() {
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private void showDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.bottomsheetlayout);
+
+        LinearLayout galleryLayout = dialog.findViewById(R.id.layoutEdit);
+        LinearLayout cameraLayout = dialog.findViewById(R.id.layoutShare);
+
+
+        galleryLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                openGallery();
+            }
+        });
+
+        cameraLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (allPermissionsGranted()) {
+                    startActivity(new Intent(AddDataActivity.this, camerapreview.class));
+                } else {
+                    ActivityCompat.requestPermissions(AddDataActivity.this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+                }
+            }
+        });
+
+
+        dialog.show();
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
+
+
     public void forDefault() {
         binding.howWas.setTextAppearance(R.style.WeekRow);
         binding.writeData.setTextAppearance(R.style.WeekRow);
@@ -352,7 +472,6 @@ public class AddDataActivity extends AppCompatActivity {
                         editor.apply();
                         dialog.show();
                     } else {
-                        Toast.makeText(AddDataActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(AddDataActivity.this, CalenderViewActivity.class));
                         finish();
                     }
@@ -386,5 +505,9 @@ public class AddDataActivity extends AppCompatActivity {
 
         // Show the circular frame associated with the clicked image button
         circularFrame.setVisibility(View.VISIBLE);
+    }
+    private int generateRandomRequestCode(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
     }
 }

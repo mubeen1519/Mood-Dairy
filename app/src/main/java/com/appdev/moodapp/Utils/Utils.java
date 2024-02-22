@@ -20,6 +20,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class Utils {
+    public static String URI_IMAGE = "";
     public static void status_bar(Activity activity, int color) {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

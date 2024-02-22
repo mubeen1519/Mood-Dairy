@@ -31,7 +31,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 }
@@ -60,5 +60,11 @@ dependencies {
     implementation("com.github.ozcanalasalvar.picker:wheelview:2.0.7")
     implementation("androidx.compose.material3:material3:1.2.0-alpha02")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
-    implementation ("com.github.lecho:hellocharts-library:1.5.8@aar")
+    implementation("com.github.lecho:hellocharts-library:1.5.8@aar")
+    implementation("androidx.camera:camera-core:1.4.0-alpha01")
+    implementation("androidx.camera:camera-lifecycle:1.4.0-alpha01")
+    implementation("androidx.camera:camera-video:1.4.0-alpha01")
+    implementation("androidx.camera:camera-view:1.4.0-alpha01")
+    implementation("androidx.camera:camera-view:1.4.0-alpha01")
+    implementation("androidx.camera:camera-extensions:1.4.0-alpha01")
 }
