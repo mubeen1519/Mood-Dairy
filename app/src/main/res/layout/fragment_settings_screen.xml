@@ -8,7 +8,13 @@
     android:layout_height="match_parent"
     android:paddingVertical="@dimen/_40sdp"
     tools:context=".Fragments.settingsScreen">
-
+ <ScrollView
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/fingerPrint"
@@ -183,5 +189,34 @@
             android:text="Adjust text size" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:foreground="@drawable/ripple_effect_settings"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/Logout"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_20sdp"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:layout_width="@dimen/_32sdp"
+            style="@style/Logout"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_32sdp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="1dp"
+            android:id="@+id/logoutText"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:gravity="center"
+            style="@style/WordColor"
+            android:textSize="@dimen/_14ssp"
+            android:text="Logout" />
+
+    </LinearLayout>
+     </LinearLayout>
+ </ScrollView>
 </LinearLayout>

@@ -30,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.appdev.moodapp.AdjustWordSize;
+import com.appdev.moodapp.Login_screen;
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.ReminderSetter;
 import com.appdev.moodapp.ThemeChange;
@@ -37,6 +38,7 @@ import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.FragmentSettingsScreenBinding;
 import com.appdev.moodapp.timeline;
 import com.appdev.moodapp.updateData;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.Executor;
 
@@ -44,6 +46,8 @@ import java.util.concurrent.Executor;
 public class settingsScreen extends Fragment {
     private FragmentSettingsScreenBinding binding; // Declare the binding object
     String textSizeName;
+    private FirebaseAuth firebaseAuth;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment using view binding
@@ -65,6 +69,11 @@ public class settingsScreen extends Fragment {
             }
         });
 
+        binding.Logout.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(requireActivity(), Login_screen.class));
+
+        });
 
         switch (textSizeName) {
             case "medium":
