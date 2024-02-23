@@ -67,4 +67,5 @@ dependencies {
     implementation("androidx.camera:camera-view:1.4.0-alpha01")
     implementation("androidx.camera:camera-view:1.4.0-alpha01")
     implementation("androidx.camera:camera-extensions:1.4.0-alpha01")
+    implementation ("com.ramotion.paperonboarding:paper-onboarding:1.1.3")
 }
