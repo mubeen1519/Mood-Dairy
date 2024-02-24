@@ -16,6 +16,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 
 import android.util.TypedValue;
@@ -32,6 +35,7 @@ import com.appdev.moodapp.AddDataActivity;
 import com.appdev.moodapp.R;
 import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
 import com.appdev.moodapp.Utils.DailyData;
+import com.appdev.moodapp.Utils.ImageAdapter;
 import com.appdev.moodapp.Utils.Utils;
 import com.appdev.moodapp.databinding.CalendarDayLayoutBinding;
 import com.appdev.moodapp.databinding.CalenderHeaderBinding;
@@ -52,10 +56,13 @@ import com.kizitonwose.calendar.view.ViewContainer;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -135,11 +142,80 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                         dataList.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             DailyData dailyData = snapshot.getValue(DailyData.class);
-                            if (dailyData != null) {
-                                dataList.add(dailyData);
+                            if (dailyData != null && isToday(dailyData.getDate())) {
+                                binding.listitem.setVisibility(View.VISIBLE);
+                                SharedPreferences preferences = binding.getRoot().getContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+                                String textSizeName = preferences.getString("text_size", "");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                Date date;
+                                try {
+                                    date = sdf.parse(dailyData.getDate());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                    return;
+                                }
+
+                                // Extract month and day
+                                Calendar calendar = Calendar.getInstance();
+                                assert date != null;
+                                calendar.setTime(date);
+                                int monthNumber = calendar.get(Calendar.MONTH);
+                                int dayNumber = calendar.get(Calendar.DAY_OF_MONTH);
+
+                                // Get first three letters of the month name
+                                DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
+                                String[] months = dfs.getShortMonths();
+                                String monthName = months[monthNumber];
+
+                                // Get the first three letters of the month name
+                                String firstThreeLettersOfMonth = monthName.substring(0, 3);
+
+                                binding.calendarDay.setText(String.valueOf(dayNumber));
+                                binding.calendarMonth.setText(firstThreeLettersOfMonth);
+                                binding.textualData.setText(dailyData.getTextualData());
+
+                                switch (textSizeName) {
+                                    case "medium":
+                                        forMedium();
+                                        break;
+                                    case "large":
+                                        forLarge();
+                                        break;
+                                    default:
+                                        forDefault();
+                                        break;
+                                }
+                                int emojiResId;
+                                switch (dailyData.getEmoji()) {
+                                    case "Happy":
+                                        emojiResId = R.drawable.face1;
+                                        break;
+                                    case "Smile":
+                                        emojiResId = R.drawable.face2;
+                                        break;
+                                    case "Sad":
+                                        emojiResId = R.drawable.face4;
+                                        break;
+                                    case "Cry":
+                                        emojiResId = R.drawable.face5;
+                                        break;
+                                    default:
+                                        emojiResId = R.drawable.face3;
+                                        break;
+                                }
+                                binding.imageBtn.setImageResource(emojiResId);
+
+                                if (dailyData.getImageUris() != null) {
+                                    List<String> imageUrls = dailyData.getImageUris(); // Assuming getImageUris() returns a List<String>
+                                    ImageAdapter adapter = new ImageAdapter(imageUrls, binding.getRoot().getContext());
+                                    binding.RcImages.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext(), LinearLayoutManager.HORIZONTAL, false));
+                                    binding.RcImages.setAdapter(adapter);
+                                }
+
+                            } else{
+                                binding.listitem.setVisibility(View.GONE);
                             }
                         }
-                        adapter.notifyDataSetChanged();
                         binding.pg.setVisibility(View.GONE);
                     } else {
                         // Hide the loadingLayout if there's no data
@@ -152,10 +228,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                     // Handle any errors
                 }
             });
-
-            adapter = new DailyDataAdapter(dataList);
-            binding.ListRc.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-            binding.ListRc.setAdapter(adapter);
 
         }
 
@@ -207,9 +279,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                     });
                 }
 
-                adapter = new DailyDataAdapter(dataList);
-                binding.ListRc.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-                binding.ListRc.setAdapter(adapter);
                 CalendarMonth firstVisibleMonth = binding.exFiveCalendar.findFirstVisibleMonth();
                 if (firstVisibleMonth != null) {
                     binding.exFiveCalendar.smoothScrollToMonth(firstVisibleMonth.getYearMonth().plusMonths(1));
@@ -256,9 +325,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                     });
                 }
 
-                adapter = new DailyDataAdapter(dataList);
-                binding.ListRc.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-                binding.ListRc.setAdapter(adapter);
+
                 CalendarMonth firstVisibleMonth = binding.exFiveCalendar.findFirstVisibleMonth();
                 if (firstVisibleMonth != null) {
                     binding.exFiveCalendar.smoothScrollToMonth(firstVisibleMonth.getYearMonth().minusMonths(1));
@@ -267,6 +334,28 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         });
 
 
+    }
+
+    public void forDefault() {
+        binding.calendarDay.setTextAppearance(R.style.RadioSize);
+        binding.calendarMonth.setTextAppearance(R.style.RadioSize);
+        binding.textualData.setTextAppearance(R.style.RadioSize);
+    }
+
+    public void forMedium() {
+        binding.calendarDay.setTextAppearance(R.style.RadioSizeMedium);
+        binding.calendarMonth.setTextAppearance(R.style.RadioSizeMedium);
+        binding.textualData.setTextAppearance(R.style.RadioSizeMedium);
+    }
+
+    public void forLarge() {
+        binding.calendarDay.setTextAppearance(R.style.RadioSizeLarge);
+        binding.calendarMonth.setTextAppearance(R.style.RadioSizeLarge);
+        binding.textualData.setTextAppearance(R.style.RadioSizeLarge);
+    }
+    public static boolean isToday(String date) {
+        LocalDate currentDate = LocalDate.now();
+        return date.equals(currentDate.toString());
     }
 
 
