@@ -6,7 +6,7 @@
     android:orientation="vertical"
     style="@style/Background"
     android:layout_height="match_parent"
-    android:paddingVertical="@dimen/_40sdp"
+    android:paddingVertical="@dimen/_20sdp"
     tools:context=".Fragments.settingsScreen">
  <ScrollView
      android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         android:id="@+id/fingerPrint"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -57,7 +57,7 @@
         android:id="@+id/reminder"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -85,7 +85,7 @@
         android:clickable="true"
         android:focusable="true"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -113,7 +113,7 @@
         android:id="@+id/privacy"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -141,7 +141,7 @@
         android:id="@+id/profile"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -169,7 +169,7 @@
         android:id="@+id/Adjust_text"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -197,7 +197,7 @@
         android:id="@+id/Logout"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_10sdp"
         android:layout_height="wrap_content">
 
         <ImageView
