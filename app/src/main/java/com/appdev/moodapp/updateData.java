@@ -55,7 +55,7 @@ public class updateData extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         binding.pg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);
         binding.loaderPg.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.common), PorterDuff.Mode.SRC_IN);
-        binding.loadingLayout.setVisibility(View.VISIBLE);
+//        binding.loadingLayout.setVisibility(View.VISIBLE);
         String userId = firebaseAuth.getUid();
         if (userId != null) {
             DatabaseReference userProfileRef = firebaseDatabase.getReference().child("userProfiles").child(userId);
@@ -112,7 +112,7 @@ public class updateData extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            user.verifyBeforeUpdateEmail(binding.suMail.getText().toString())
+                                            user.updateEmail(binding.suMail.getText().toString())
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {

@@ -171,6 +171,10 @@
         <item name="android:src">@drawable/profileday</item>
     </style>
 
+    <style name="Logout">
+        <item name="android:src">@drawable/logout_48</item>
+    </style>
+
     <style name="WordSize">
         <item name="android:src">@drawable/sizeday</item>
     </style>

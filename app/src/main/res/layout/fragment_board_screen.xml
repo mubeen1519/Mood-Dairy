@@ -8,8 +8,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:scrollbars="vertical"
+    android:paddingBottom="@dimen/_70sdp"
     tools:context=".Fragments.BoardScreen">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
     <LinearLayout
         style="@style/Background"
         android:layout_width="match_parent"
@@ -400,7 +409,8 @@
         android:id="@+id/newList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false"
         android:layout_marginBottom="@dimen/_60sdp" />
-
-
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

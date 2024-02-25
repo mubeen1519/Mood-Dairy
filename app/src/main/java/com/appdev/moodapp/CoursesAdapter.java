@@ -59,7 +59,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.ViewHold
 
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {openURL(course.getUrl());
+                public void onClick(View view) {openURL(course.getUrl() );
                 }
             });
             binding.courseBtn.setOnClickListener(new View.OnClickListener() {

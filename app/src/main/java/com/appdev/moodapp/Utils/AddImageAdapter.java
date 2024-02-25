@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,12 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
         Glide.with(context)
                 .load(imageUrl)
                 .into(holder.imageView);
+
+        holder.deleteImage.setOnClickListener(view -> {
+            imageUrls.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, imageUrls.size());
+        });
     }
 
     @Override
@@ -46,10 +53,12 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ImageButton deleteImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
+            deleteImage = itemView.findViewById(R.id.removeBtn);
         }
     }
 }
