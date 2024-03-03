@@ -120,7 +120,8 @@
         style="@style/RoundedLinearLayout"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginVertical="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_50sdp"
         android:layout_height="wrap_content">
 
         <LinearLayout
