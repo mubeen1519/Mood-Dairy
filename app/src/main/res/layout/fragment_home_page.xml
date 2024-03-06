@@ -113,6 +113,18 @@
         android:progressTint="@color/common"
         android:layout_marginTop="@dimen/_20sdp"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/not_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        style="@style/WordColor"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textSize="@dimen/_18ssp"
+        android:text="No events found for this day" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/listitem"

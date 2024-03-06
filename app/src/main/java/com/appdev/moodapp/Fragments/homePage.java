@@ -21,7 +21,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,7 +32,6 @@ import android.widget.Toast;
 
 import com.appdev.moodapp.AddDataActivity;
 import com.appdev.moodapp.R;
-import com.appdev.moodapp.Recyclerview.DailyDataAdapter;
 import com.appdev.moodapp.Utils.DailyData;
 import com.appdev.moodapp.Utils.ImageAdapter;
 import com.appdev.moodapp.Utils.Utils;
@@ -131,6 +129,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         binding.exFiveCalendar.setMonthScrollListener(calendarMonth -> {
 
             binding.listitem.setVisibility(View.INVISIBLE);
+            binding.notAvailable.setVisibility(View.GONE);
             YearMonth yearMonth = calendarMonth.getYearMonth();
             binding.exFiveMonthYearText.setText(Utils.displayText(yearMonth, false));
 
@@ -347,23 +346,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
     }
 
-    public void forDefault() {
-        binding.calendarDay.setTextAppearance(R.style.RadioSize);
-        binding.calendarMonth.setTextAppearance(R.style.RadioSize);
-        binding.textualData.setTextAppearance(R.style.RadioSize);
-    }
-
-    public void forMedium() {
-        binding.calendarDay.setTextAppearance(R.style.RadioSizeMedium);
-        binding.calendarMonth.setTextAppearance(R.style.RadioSizeMedium);
-        binding.textualData.setTextAppearance(R.style.RadioSizeMedium);
-    }
-
-    public void forLarge() {
-        binding.calendarDay.setTextAppearance(R.style.RadioSizeLarge);
-        binding.calendarMonth.setTextAppearance(R.style.RadioSizeLarge);
-        binding.textualData.setTextAppearance(R.style.RadioSizeLarge);
-    }
 
     public static boolean isToday(String date) {
         LocalDate currentDate = LocalDate.now();
@@ -373,10 +355,10 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
     private void configureBinders(List<DayOfWeek> daysOfWeek) {
         binding.exFiveCalendar.setDayBinder(new MonthDayBinder<DayViewContainer>() {
-            @NotNull
+            @NonNull
             @Override
-            public DayViewContainer create(@NotNull View view) {
-                return new DayViewContainer(view);
+            public DayViewContainer create(@NonNull View view) {
+                return new DayViewContainer(view,binding);
             }
 
             @Override
@@ -499,34 +481,143 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
     }
 
 
-    private static class DayViewContainer extends ViewContainer {
+    private class DayViewContainer extends ViewContainer {
         CalendarDay day;
         CalendarDayLayoutBinding calendarDayLayoutBinding;
+        Boolean isClicked = false;
 
-        DayViewContainer(@NotNull View view) {
+
+        DayViewContainer(@NotNull View view, FragmentHomePageBinding binding) {
             super(view);
             calendarDayLayoutBinding = CalendarDayLayoutBinding.bind(view);
             view.setOnClickListener(v -> {
+                isClicked = true;
+                homePage.this.binding.listitem.setVisibility(View.GONE);
+                homePage.this.binding.notAvailable.setVisibility(View.GONE);
+                String dateString = day.getDate().toString();
+                String[] dateParts = dateString.split("-");
+                int year = Integer.parseInt(dateParts[0]);
+                int month = Integer.parseInt(dateParts[1]);
+                int dayOfMonth = Integer.parseInt(dateParts[2]);
+
+                Intent intent = new Intent(calendarDayLayoutBinding.getRoot().getContext(), AddDataActivity.class);
+
+                intent.putExtra("day", dayOfMonth);
+                intent.putExtra("month", month);
+                intent.putExtra("year", year);
+
+
+                if (homePage.this.firebaseAuth.getCurrentUser() != null) {
+
+
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(homePage.this.firebaseAuth.getCurrentUser().getUid()).child(String.valueOf(year)).child(String.valueOf(month)).child("dailyData").child(String.valueOf(dayOfMonth));
+
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                    DailyData dailyData = dataSnapshot.getValue(DailyData.class);
+                                    if (dailyData != null) {
+                                        homePage.this.binding.notAvailable.setVisibility(View.GONE);
+                                        homePage.this.binding.listitem.setVisibility(View.VISIBLE);
+
+                                        SharedPreferences preferences = homePage.this.binding.getRoot().getContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+                                        String textSizeName = preferences.getString("text_size", "");
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                        Date date;
+                                        try {
+                                            date = sdf.parse(dailyData.getDate());
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                            return;
+                                        }
+
+                                        // Extract month and day
+                                        Calendar calendar = Calendar.getInstance();
+                                        assert date != null;
+                                        calendar.setTime(date);
+                                        int monthNumber = calendar.get(Calendar.MONTH);
+                                        int dayNumber = calendar.get(Calendar.DAY_OF_MONTH);
+
+                                        // Get first three letters of the month name
+                                        DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
+                                        String[] months = dfs.getShortMonths();
+                                        String monthName = months[monthNumber];
+
+                                        // Get the first three letters of the month name
+                                        String firstThreeLettersOfMonth = monthName.substring(0, 3);
+
+                                        homePage.this.binding.calendarDay.setText(String.valueOf(dayNumber));
+                                        homePage.this.binding.calendarMonth.setText(firstThreeLettersOfMonth);
+                                        homePage.this.binding.textualData.setText(dailyData.getTextualData());
+
+                                        switch (textSizeName) {
+                                            case "medium":
+                                                forMedium();
+                                                break;
+                                            case "large":
+                                                forLarge();
+                                                break;
+                                            default:
+                                                forDefault();
+                                                break;
+                                        }
+                                        int emojiResId;
+                                        switch (dailyData.getEmoji()) {
+                                            case "Happy":
+                                                emojiResId = R.drawable.face1;
+                                                break;
+                                            case "Smile":
+                                                emojiResId = R.drawable.face2;
+                                                break;
+                                            case "Sad":
+                                                emojiResId = R.drawable.face4;
+                                                break;
+                                            case "Cry":
+                                                emojiResId = R.drawable.face5;
+                                                break;
+                                            default:
+                                                emojiResId = R.drawable.face3;
+                                                break;
+                                        }
+                                        homePage.this.binding.imageBtn.setImageResource(emojiResId);
+
+                                        if (dailyData.getImageUris() != null) {
+                                            List<String> imageUrls = dailyData.getImageUris(); // Assuming getImageUris() returns a List<String>
+                                            ImageAdapter adapter = new ImageAdapter(imageUrls, homePage.this.binding.getRoot().getContext());
+                                            homePage.this.binding.RcImages.setLayoutManager(new LinearLayoutManager(homePage.this.binding.getRoot().getContext(), LinearLayoutManager.HORIZONTAL, false));
+                                            homePage.this.binding.RcImages.setAdapter(adapter);
+                                        }
+
+                                    } else {
+                                        homePage.this.binding.listitem.setVisibility(View.GONE);
+                                    }
+                                homePage.this.binding.pg.setVisibility(View.GONE);
+                            } else {
+                                // Hide the loadingLayout if there's no data
+                                homePage.this.binding.pg.setVisibility(View.GONE);
+                                if(isClicked){
+                                    homePage.this.binding.notAvailable.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            homePage.this.binding.notAvailable.setVisibility(View.GONE);
+
+                        }
+                    });
+
+                }
                 if(isToday(String.valueOf(day.getDate()))){
                     if (day.getPosition() == DayPosition.MonthDate) {
-
-                        String dateString = day.getDate().toString();
-                        String[] dateParts = dateString.split("-");
-                        int year = Integer.parseInt(dateParts[0]);
-                        int month = Integer.parseInt(dateParts[1]);
-                        int dayOfMonth = Integer.parseInt(dateParts[2]);
-
-                        Intent intent = new Intent(calendarDayLayoutBinding.getRoot().getContext(), AddDataActivity.class);
-
-                        intent.putExtra("day", dayOfMonth);
-                        intent.putExtra("month", month);
-                        intent.putExtra("year", year);
-
+                        homePage.this.binding.notAvailable.setVisibility(View.GONE);
+                        homePage.this.binding.listitem.setVisibility(View.VISIBLE);
+                        isClicked = false;
                         calendarDayLayoutBinding.getRoot().getContext().startActivity(intent);
-
-                    }   
-                } else{
-                    Toast.makeText(getView().getContext(), "You can only add data for today !", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -541,7 +632,23 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
             legendLayout = CalenderHeaderBinding.bind(view).legendLayout.getRoot();
         }
     }
+    public void forDefault() {
+        binding.calendarDay.setTextAppearance(R.style.RadioSize);
+        binding.calendarMonth.setTextAppearance(R.style.RadioSize);
+        binding.textualData.setTextAppearance(R.style.RadioSize);
+    }
 
+    public void forMedium() {
+        binding.calendarDay.setTextAppearance(R.style.RadioSizeMedium);
+        binding.calendarMonth.setTextAppearance(R.style.RadioSizeMedium);
+        binding.textualData.setTextAppearance(R.style.RadioSizeMedium);
+    }
+
+    public void forLarge() {
+        binding.calendarDay.setTextAppearance(R.style.RadioSizeLarge);
+        binding.calendarMonth.setTextAppearance(R.style.RadioSizeLarge);
+        binding.textualData.setTextAppearance(R.style.RadioSizeLarge);
+    }
 
     @Override
     public Toolbar getToolbar() {
