@@ -73,7 +73,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    String textSizeName,cMonth,cYear;
+    String textSizeName, cMonth, cYear;
 
 
     public homePage() {
@@ -129,7 +129,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         binding.exFiveCalendar.setMonthScrollListener(calendarMonth -> {
 
             binding.listitem.setVisibility(View.INVISIBLE);
-            binding.notAvailable.setVisibility(View.GONE);
             YearMonth yearMonth = calendarMonth.getYearMonth();
             binding.exFiveMonthYearText.setText(Utils.displayText(yearMonth, false));
 
@@ -158,7 +157,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                                 DailyData dailyData = snapshot.getValue(DailyData.class);
                                 if (dailyData != null && isToday(dailyData.getDate()) && cMonth.equalsIgnoreCase(getMonthName(curMonth)) && cYear.equalsIgnoreCase(String.valueOf(curYear))) {
                                     binding.listitem.setVisibility(View.VISIBLE);
-
+                                    binding.notAvailable.setVisibility(View.GONE);
                                     SharedPreferences preferences = binding.getRoot().getContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
                                     String textSizeName = preferences.getString("text_size", "");
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -229,12 +228,14 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
                                 } else {
                                     binding.listitem.setVisibility(View.GONE);
+                                    binding.notAvailable.setVisibility(View.VISIBLE);
                                 }
                             }
                             binding.pg.setVisibility(View.GONE);
                         } else {
                             // Hide the loadingLayout if there's no data
                             binding.pg.setVisibility(View.GONE);
+                            binding.notAvailable.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -249,7 +250,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
 
             return null;
         });
-
 
 
         binding.exFiveNextMonthImage.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +280,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                             } else {
                                 // Hide the loadingLayout if there's no data
                                 binding.pg.setVisibility(View.GONE);
+                                binding.notAvailable.setVisibility(View.VISIBLE);
                             }
                         }
 
@@ -325,6 +326,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                             } else {
                                 // Hide the loadingLayout if there's no data
                                 binding.pg.setVisibility(View.GONE);
+                                binding.notAvailable.setVisibility(View.VISIBLE);
                             }
                         }
 
@@ -358,7 +360,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
             @NonNull
             @Override
             public DayViewContainer create(@NonNull View view) {
-                return new DayViewContainer(view,binding);
+                return new DayViewContainer(view, binding);
             }
 
             @Override
@@ -465,10 +467,10 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                         if (emojiResId != 0) {
                             imageView.setImageResource(emojiResId);
                         }
-                    } else{
+                    } else {
                         imageView.setImageResource(R.drawable.face3);
                     }
-                } else{
+                } else {
                     imageView.setImageResource(R.drawable.face3);
                 }
             }
@@ -485,7 +487,6 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
         CalendarDay day;
         CalendarDayLayoutBinding calendarDayLayoutBinding;
         Boolean isClicked = false;
-
 
         DayViewContainer(@NotNull View view, FragmentHomePageBinding binding) {
             super(view);
@@ -505,120 +506,121 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
                 intent.putExtra("day", dayOfMonth);
                 intent.putExtra("month", month);
                 intent.putExtra("year", year);
+                String monthStr = String.format(Locale.getDefault(), "%02d", month);
+                String dayStr = String.format(Locale.getDefault(), "%02d", dayOfMonth);
 
 
                 if (homePage.this.firebaseAuth.getCurrentUser() != null) {
 
+                    FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(homePage.this.firebaseAuth.getCurrentUser().getUid()).
+                            child(String.valueOf(year)).child(monthStr).child("dailyData").
+                            child(dayStr).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(homePage.this.firebaseAuth.getCurrentUser().getUid()).child(String.valueOf(year)).child(String.valueOf(month)).child("dailyData").child(String.valueOf(dayOfMonth));
+                                    if (dataSnapshot.exists()) {
+                                        DailyData dailyData = dataSnapshot.getValue(DailyData.class);
+                                        if (dailyData != null) {
+                                            homePage.this.binding.listitem.setVisibility(View.VISIBLE);
+                                            homePage.this.binding.notAvailable.setVisibility(View.GONE);
 
-                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                    DailyData dailyData = dataSnapshot.getValue(DailyData.class);
-                                    if (dailyData != null) {
-                                        homePage.this.binding.notAvailable.setVisibility(View.GONE);
-                                        homePage.this.binding.listitem.setVisibility(View.VISIBLE);
+                                            SharedPreferences preferences = homePage.this.binding.getRoot().getContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
+                                            String textSizeName = preferences.getString("text_size", "");
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                            Date date;
+                                            try {
+                                                date = sdf.parse(dailyData.getDate());
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                                return;
+                                            }
 
-                                        SharedPreferences preferences = homePage.this.binding.getRoot().getContext().getSharedPreferences("text_size_prefs", Context.MODE_PRIVATE);
-                                        String textSizeName = preferences.getString("text_size", "");
-                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                                        Date date;
-                                        try {
-                                            date = sdf.parse(dailyData.getDate());
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                            return;
+                                            // Extract month and day
+                                            Calendar calendar = Calendar.getInstance();
+                                            assert date != null;
+                                            calendar.setTime(date);
+                                            int monthNumber = calendar.get(Calendar.MONTH);
+                                            int dayNumber = calendar.get(Calendar.DAY_OF_MONTH);
+
+                                            // Get first three letters of the month name
+                                            DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
+                                            String[] months = dfs.getShortMonths();
+                                            String monthName = months[monthNumber];
+
+                                            // Get the first three letters of the month name
+                                            String firstThreeLettersOfMonth = monthName.substring(0, 3);
+
+                                            homePage.this.binding.calendarDay.setText(String.valueOf(dayNumber));
+                                            homePage.this.binding.calendarMonth.setText(firstThreeLettersOfMonth);
+                                            homePage.this.binding.textualData.setText(dailyData.getTextualData());
+
+                                            switch (textSizeName) {
+                                                case "medium":
+                                                    forMedium();
+                                                    break;
+                                                case "large":
+                                                    forLarge();
+                                                    break;
+                                                default:
+                                                    forDefault();
+                                                    break;
+                                            }
+                                            int emojiResId;
+                                            switch (dailyData.getEmoji()) {
+                                                case "Happy":
+                                                    emojiResId = R.drawable.face1;
+                                                    break;
+                                                case "Smile":
+                                                    emojiResId = R.drawable.face2;
+                                                    break;
+                                                case "Sad":
+                                                    emojiResId = R.drawable.face4;
+                                                    break;
+                                                case "Cry":
+                                                    emojiResId = R.drawable.face5;
+                                                    break;
+                                                default:
+                                                    emojiResId = R.drawable.face3;
+                                                    break;
+                                            }
+                                            homePage.this.binding.imageBtn.setImageResource(emojiResId);
+
+                                            if (dailyData.getImageUris() != null) {
+                                                List<String> imageUrls = dailyData.getImageUris(); // Assuming getImageUris() returns a List<String>
+                                                ImageAdapter adapter = new ImageAdapter(imageUrls, homePage.this.binding.getRoot().getContext());
+                                                homePage.this.binding.RcImages.setLayoutManager(new LinearLayoutManager(homePage.this.binding.getRoot().getContext(), LinearLayoutManager.HORIZONTAL, false));
+                                                homePage.this.binding.RcImages.setAdapter(adapter);
+                                            }
+
+                                        } else {
+                                            homePage.this.binding.listitem.setVisibility(View.GONE);
                                         }
-
-                                        // Extract month and day
-                                        Calendar calendar = Calendar.getInstance();
-                                        assert date != null;
-                                        calendar.setTime(date);
-                                        int monthNumber = calendar.get(Calendar.MONTH);
-                                        int dayNumber = calendar.get(Calendar.DAY_OF_MONTH);
-
-                                        // Get first three letters of the month name
-                                        DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
-                                        String[] months = dfs.getShortMonths();
-                                        String monthName = months[monthNumber];
-
-                                        // Get the first three letters of the month name
-                                        String firstThreeLettersOfMonth = monthName.substring(0, 3);
-
-                                        homePage.this.binding.calendarDay.setText(String.valueOf(dayNumber));
-                                        homePage.this.binding.calendarMonth.setText(firstThreeLettersOfMonth);
-                                        homePage.this.binding.textualData.setText(dailyData.getTextualData());
-
-                                        switch (textSizeName) {
-                                            case "medium":
-                                                forMedium();
-                                                break;
-                                            case "large":
-                                                forLarge();
-                                                break;
-                                            default:
-                                                forDefault();
-                                                break;
-                                        }
-                                        int emojiResId;
-                                        switch (dailyData.getEmoji()) {
-                                            case "Happy":
-                                                emojiResId = R.drawable.face1;
-                                                break;
-                                            case "Smile":
-                                                emojiResId = R.drawable.face2;
-                                                break;
-                                            case "Sad":
-                                                emojiResId = R.drawable.face4;
-                                                break;
-                                            case "Cry":
-                                                emojiResId = R.drawable.face5;
-                                                break;
-                                            default:
-                                                emojiResId = R.drawable.face3;
-                                                break;
-                                        }
-                                        homePage.this.binding.imageBtn.setImageResource(emojiResId);
-
-                                        if (dailyData.getImageUris() != null) {
-                                            List<String> imageUrls = dailyData.getImageUris(); // Assuming getImageUris() returns a List<String>
-                                            ImageAdapter adapter = new ImageAdapter(imageUrls, homePage.this.binding.getRoot().getContext());
-                                            homePage.this.binding.RcImages.setLayoutManager(new LinearLayoutManager(homePage.this.binding.getRoot().getContext(), LinearLayoutManager.HORIZONTAL, false));
-                                            homePage.this.binding.RcImages.setAdapter(adapter);
-                                        }
-
+                                        homePage.this.binding.pg.setVisibility(View.GONE);
                                     } else {
-                                        homePage.this.binding.listitem.setVisibility(View.GONE);
+
+                                        homePage.this.binding.pg.setVisibility(View.GONE);
+                                        homePage.this.binding.notAvailable.setVisibility(View.VISIBLE);
+
                                     }
-                                homePage.this.binding.pg.setVisibility(View.GONE);
-                            } else {
-                                // Hide the loadingLayout if there's no data
-                                homePage.this.binding.pg.setVisibility(View.GONE);
-                                if(isClicked){
-                                    homePage.this.binding.notAvailable.setVisibility(View.VISIBLE);
                                 }
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            homePage.this.binding.notAvailable.setVisibility(View.GONE);
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    homePage.this.binding.notAvailable.setVisibility(View.GONE);
 
-                        }
-                    });
+                                }
+                            });
 
                 }
-                if(isToday(String.valueOf(day.getDate()))){
-                    if (day.getPosition() == DayPosition.MonthDate) {
-                        homePage.this.binding.notAvailable.setVisibility(View.GONE);
-                        homePage.this.binding.listitem.setVisibility(View.VISIBLE);
-                        isClicked = false;
-                        calendarDayLayoutBinding.getRoot().getContext().startActivity(intent);
-                    }
-                }
+//                if (isToday(String.valueOf(day.getDate()))) {
+//                    if (day.getPosition() == DayPosition.MonthDate) {
+////                        homePage.this.binding.listitem.setVisibility(View.VISIBLE);
+//                        homePage.this.binding.notAvailable.setVisibility(View.GONE);
+//                        isClicked = false;
+////                        calendarDayLayoutBinding.getRoot().getContext().startActivity(intent);
+//                    }
+//                }
             });
         }
     }
@@ -632,6 +634,7 @@ public class homePage extends BaseFragment implements BaseFragment.HasToolbar {
             legendLayout = CalenderHeaderBinding.bind(view).legendLayout.getRoot();
         }
     }
+
     public void forDefault() {
         binding.calendarDay.setTextAppearance(R.style.RadioSize);
         binding.calendarMonth.setTextAppearance(R.style.RadioSize);

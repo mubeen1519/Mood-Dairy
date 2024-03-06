@@ -64,7 +64,7 @@
             android:singleLine="true"
             android:ellipsize="end"
             style="@style/WordColor"
-            android:text="Data that was written by" />
+            android:text="" />
 
 
         <androidx.recyclerview.widget.RecyclerView
